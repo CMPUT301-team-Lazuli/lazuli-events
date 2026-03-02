@@ -103,12 +103,9 @@ public class Profile {
     /**
      * Sets the profile's device id to a new one, throws an error if new notification preference
      * is not one of the correct ones.
-     * @throws java.io.IOException  If an input is not a valid notification preference to have.
      * @param notifPref the new deviceId for the selected profile
      */
     public void setNotifPref(String notifPref){
-        //TODO: assert notifPref is a valid option
-
         //update notification preference
         this.notifPref = notifPref;
     }
@@ -122,12 +119,24 @@ public class Profile {
     }
 
     /**
+     * Sets the profile's event history to a new one.
+     * @param newEventIds   the new event history for a profile as an ArrayList of strings
+     */
+    public void setEventIds(ArrayList<String> newEventIds){
+        this.eventIds = newEventIds;
+    }
+
+    /**
      * Adds a specific eventID to a profile's event history only if the eventID is not already in
      * the profile's event history.
+     * @throws IllegalArgumentException if the event is already in a profile's history.
      * @param eventId the event ID to be added
      */
     public void addEventId(String eventId){
-        //TODO: Throw error if event is already in eventIds
+        //Assert event isn't already in event history
+        if (eventIds.contains(eventId)){
+            throw new IllegalArgumentException("Event already in event history.");
+        }
 
         //Add event
         eventIds.add(eventId);
