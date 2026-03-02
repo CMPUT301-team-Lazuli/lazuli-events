@@ -2,4 +2,27 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph" />
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/userEventsFragment">
+
+    <fragment
+        android:id="@+id/userEventsFragment"
+        android:name="com.example.lazuli_events.UserEventsFragment"
+        android:label="fragment_user_events"
+        tools:layout="@layout/fragment_user_events" >
+        <action
+            android:id="@+id/action_userEventsFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.lazuli_events.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.example.lazuli_events.TestFragment"
+        android:label="fragment_test"
+        tools:layout="@layout/fragment_test" />
+</navigation>
