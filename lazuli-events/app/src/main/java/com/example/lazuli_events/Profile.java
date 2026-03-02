@@ -3,7 +3,8 @@ package com.example.lazuli_events;
 import java.util.ArrayList;
 
 /**
- * This is a class representing a user profile.
+ * This is a class representing a user profile. It stores a user's
+ * profile data, event registration history, and notification preference.
  */
 public class Profile {
     private String name;
@@ -12,17 +13,15 @@ public class Profile {
     private String deviceId;
     private String notifPref;
     private ArrayList<String> eventIds;
-    private ProfileDB profileDB;
 
     public Profile(String name, String email, String phone, String deviceId,
-                   String notifPref, ArrayList<String> eventIds, ProfileDB profileDB){
+                   String notifPref, ArrayList<String> eventIds){
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.deviceId = deviceId;
         this.notifPref = notifPref;
         this.eventIds = eventIds;
-        this.profileDB = profileDB;
     }
 
     public String getName() {
