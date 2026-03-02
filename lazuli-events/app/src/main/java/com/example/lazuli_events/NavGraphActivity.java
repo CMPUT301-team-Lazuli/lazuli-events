@@ -12,7 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 public class NavGraphActivity extends AppCompatActivity {
 
-    private NavController navController;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

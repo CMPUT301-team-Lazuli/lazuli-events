@@ -19,4 +19,82 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
+
+    <FrameLayout
+        android:id="@+id/frame_layout_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </FrameLayout>
+
+    <com.google.android.material.dockedtoolbar.DockedToolbarLayout
+        android:id="@+id/dockedToolbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+
+        app:layout_constraintBottom_toBottomOf="@+id/frame_layout_fragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:padding="0dp"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="0dp"
+            android:orientation="horizontal">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="home_button"
+                android:layout_weight="1"
+                app:iconSize="48dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:icon="@drawable/ic_home"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="home_button"
+                android:layout_weight="1"
+                app:iconSize="48dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:icon="@drawable/ic_home"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="home_button"
+                android:layout_weight="1"
+                app:iconSize="48dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:icon="@drawable/ic_home"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="home_button"
+                android:layout_weight="1"
+                app:iconSize="48dp"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:icon="@drawable/ic_home"/>
+
+
+
+        </LinearLayout>
+    </com.google.android.material.dockedtoolbar.DockedToolbarLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
