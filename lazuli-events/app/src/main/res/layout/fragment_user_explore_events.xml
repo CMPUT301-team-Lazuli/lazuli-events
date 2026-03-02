@@ -2,17 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_user_profile"
+    android:id="@+id/fragment_explore_events"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
 
     <TextView
-        android:id="@+id/user_profile_textView"
+        android:id="@+id/explore_events_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="user profile"
+        android:text="explore events"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -21,19 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".UserProfileActivity"
-            android:exported="false" />
 
-        <activity
-            android:name=".UserEventsFragment_old"
-            android:exported="false"
-            android:theme="@style/Theme.Lazulievents" />
-        <activity
-            android:name=".MainActivityOld"
-            android:exported="true">
-
-        </activity>
     </application>
 
 </manifest>

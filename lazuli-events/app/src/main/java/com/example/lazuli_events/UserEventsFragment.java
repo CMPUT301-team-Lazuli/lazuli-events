@@ -31,20 +31,20 @@ public class UserEventsFragment extends Fragment {
     }
 
 
-    //
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // gets a reference to the nav host activity, to get its navController.
-                // uses the controller to navigate to the user profile fragment, after 1.5 seconds
-                NavGraphActivity navGraphActivity = (NavGraphActivity) getActivity();
-                assert navGraphActivity != null;
-                navGraphActivity.navController.navigate(R.id.action_userEventsFragment_to_userProfileFragment);
-            }
-        }, 1_500);
-    }
+//    //
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // gets a reference to the nav host activity, to get its navController.
+//                // uses the controller to navigate to the user profile fragment, after 1.5 seconds
+//                NavGraphActivity navGraphActivity = (NavGraphActivity) getActivity();
+//                assert navGraphActivity != null;
+//                navGraphActivity.navController.navigate(R.id.action_userEventsFragment_to_userProfileFragment);
+//            }
+//        }, 1_500);
+//    }
 }

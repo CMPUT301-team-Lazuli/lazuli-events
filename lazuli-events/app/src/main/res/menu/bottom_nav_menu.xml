@@ -3,22 +3,26 @@
 
     <item
         android:id="@+id/menu_item_home"
-        android:title="home"
-        android:icon="@drawable/ic_launcher_foreground" />
+        android:enabled="true"
+        android:title=""
+        android:icon="@drawable/ic_home" />
 
     <item
         android:id="@+id/menu_item_notifications"
-        android:title="home"
-        android:icon="@drawable/ic_home" />
+        android:enabled="true"
+        android:title=""
+        android:icon="@drawable/ic_notifications" />
 
     <item
         android:id="@+id/menu_item_explore"
-        android:title="home"
-        android:icon="@drawable/ic_home" />
+        android:enabled="true"
+        android:title=""
+        android:icon="@drawable/ic_search" />
 
     <item
         android:id="@+id/menu_item_profile"
-        android:title="home"
-        android:icon="@drawable/ic_home" />
+        android:enabled="true"
+        android:title=""
+        android:icon="@drawable/ic_profile" />
 
 </menu>

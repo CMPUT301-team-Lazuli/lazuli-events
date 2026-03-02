@@ -13,16 +13,16 @@ import android.view.ViewGroup;
  * Use the {@link UserProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserProfileFragment extends Fragment {
+public class UserExploreEventsFragment extends Fragment {
 
 
-    public UserProfileFragment() {
+    public UserExploreEventsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        return inflater.inflate(R.layout.fragment_user_explore_events, container, false);
     }
 }
