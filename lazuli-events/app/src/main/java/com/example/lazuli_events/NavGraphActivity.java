@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavHost;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,6 +23,7 @@ import android.view.MenuItem;
 public class NavGraphActivity extends AppCompatActivity {
 
     NavController navController;
+    NavHostFragment navHostFragment;
 //    BottomNavigationView bottomNavigationView;
 
     @Override
@@ -35,8 +38,7 @@ public class NavGraphActivity extends AppCompatActivity {
         });
 
         // get the controller of the navhost. navhost is the UI view with navigation buttons
-        NavHostFragment navHostFragment =
-                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         navController = navHostFragment.getNavController();
 
 
@@ -74,13 +76,14 @@ public class NavGraphActivity extends AppCompatActivity {
 
 
 
-
-
-
     // this switches out the current fragment to be displayed
     // invoked when navigating with ui buttons
     private void setCurrentFragment(int resourceId) {
         navController.navigate(resourceId);
+    }
+
+    public Fragment getCurrentFragment() {
+        return navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
 
     }
 }

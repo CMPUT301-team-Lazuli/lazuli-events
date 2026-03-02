@@ -4,27 +4,32 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link UserProfileFragment#newInstance} factory method to
+ * Use the {@link EventDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserProfileFragment extends Fragment {
+public class EventDetailsFragment extends Fragment {
 
+    // this displays the event info page, where the user can join the lottery
 
-    public UserProfileFragment() {
+    public EventDetailsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
-        return rootView;
+        String msg = "switched";
+        Log.d("switched", msg);
+        return inflater.inflate(R.layout.fragment_event_details, container, false);
+
+
     }
 }
