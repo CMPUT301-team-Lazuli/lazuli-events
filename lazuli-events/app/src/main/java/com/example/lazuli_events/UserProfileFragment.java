@@ -8,13 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UserProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class UserProfileFragment extends Fragment {
 
+// display and update user info
+public class UserProfileFragment extends Fragment {
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -22,8 +18,12 @@ public class UserProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);  // inflate the layout
+
+        // code here
+
+        // get user details from database
+        // display details in fragment (get id of each field in fragment_user_profile.xml)
 
         return rootView;
     }

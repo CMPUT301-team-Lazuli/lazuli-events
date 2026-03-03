@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+
+// adapt event thumbnail cards to a listview on the explore page
 public class ExploreEventsCardAdapter extends ArrayAdapter<String> {
 
     public ExploreEventsCardAdapter(Context context, ArrayList<String> eventList) {

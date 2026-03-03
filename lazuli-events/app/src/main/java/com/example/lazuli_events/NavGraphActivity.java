@@ -20,6 +20,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import android.view.MenuItem;
 
+
+// this is the entry point of the application, using a single activity model.
+// NavGraphActivity == MainActivity
 public class NavGraphActivity extends AppCompatActivity {
 
     NavController navController;
@@ -42,14 +45,8 @@ public class NavGraphActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
 
 
+        // set listeners for the bottom bar menu
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-//        NavigationBarView bottomNavigationView = (NavigationBarView) findViewById(R.id.bottom_navigation_view);
-//        bottomNavigationView.bringToFront();
-//
-//        bottomNavigationView.OnItemSelectedListener(item -> {
-//            int itemId = item.getItemId();
-//        });
-
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -57,8 +54,8 @@ public class NavGraphActivity extends AppCompatActivity {
 
                 if (itemId == R.id.menu_item_home) {
                     Log.d("clicked", String.valueOf(itemId));
-//                    setCurrentFragment(R.id.action_userEventsFragment_to_userProfileFragment);  // these are the ids from the nav graph xml
-                    setCurrentFragment(R.id.userEventsFragment);
+//                    setCurrentFragment(R.id.action_userEventsFragment_to_userProfileFragment);
+                    setCurrentFragment(R.id.userEventsFragment);  // these are the ids from the nav graph xml
                 } else if (itemId == R.id.menu_item_profile) {
                     setCurrentFragment(R.id.userProfileFragment);
                 } else if (itemId == R.id.menu_item_explore) {
@@ -67,11 +64,8 @@ public class NavGraphActivity extends AppCompatActivity {
                     setCurrentFragment(R.id.userNotificationsFragment);
                 }
                 return true;
-
             }
         });
-
-
     }
 
 
@@ -82,6 +76,7 @@ public class NavGraphActivity extends AppCompatActivity {
         navController.navigate(resourceId);
     }
 
+    // getter
     public Fragment getCurrentFragment() {
         return navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
 

@@ -14,6 +14,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 
+// display cards and handle event sorting
 public class UserExploreEventsFragment extends Fragment {
 
     ListView cardListView;
@@ -25,9 +26,9 @@ public class UserExploreEventsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // inflate layout
         View rootView = inflater.inflate(R.layout.fragment_user_explore_events, container, false);
-
+        // get ref to host
         NavGraphActivity navGraphActivity = (NavGraphActivity) getActivity();
 
 
