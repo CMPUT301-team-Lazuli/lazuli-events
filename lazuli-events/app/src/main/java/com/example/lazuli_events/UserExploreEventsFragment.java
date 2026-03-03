@@ -38,6 +38,9 @@ public class UserExploreEventsFragment extends Fragment {
         ArrayList<String> cardDataList = new ArrayList<>();
         cardDataList.add("event 1");
         cardDataList.add("event 2");
+        cardDataList.add("event 3");
+        cardDataList.add("event 4");
+        cardDataList.add("event 5");
 
         // get list view and set adapter
         cardListView = rootView.findViewById(R.id.explore_events_listView);

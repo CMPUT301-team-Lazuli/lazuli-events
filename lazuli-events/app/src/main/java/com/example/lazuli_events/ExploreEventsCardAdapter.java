@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 
-// adapt event thumbnail cards to a listview on the explore page
+// custom array adapter for creating a listview of event cards on the explore page
 public class ExploreEventsCardAdapter extends ArrayAdapter<String> {
 
     public ExploreEventsCardAdapter(Context context, ArrayList<String> eventList) {
@@ -35,7 +35,7 @@ public class ExploreEventsCardAdapter extends ArrayAdapter<String> {
         // set the card view to display the attributes of the event object
         // such as its image, title, date and time
         String cardText = getItem(position);
-        TextView textView = itemView.findViewById(R.id.browse_events_card_textView);
+        TextView textView = itemView.findViewById(R.id.explore_events_card_textView);
         if (cardText != null) {
             textView.setText(cardText);
         }
