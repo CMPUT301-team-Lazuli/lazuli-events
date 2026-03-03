@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NavGraphActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_nav_host"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
+
+    <FrameLayout
+        android:id="@+id/frame_layout_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/entrant_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="switch to entrant view" />
+    </FrameLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/organizer_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="switch to organizer view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIconSize="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+<!--    <com.google.android.material.dockedtoolbar.DockedToolbarLayout-->
+<!--        android:id="@+id/dockedToolbarLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="75dp"-->
+
+<!--        app:layout_constraintBottom_toBottomOf="@+id/frame_layout_fragment"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        android:padding="0dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="fill_horizontal"-->
+<!--            android:padding="0dp"-->
+<!--            android:orientation="horizontal">-->
+
+
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="home_button"-->
+<!--                android:layout_weight="1"-->
+<!--                app:iconSize="48dp"-->
+<!--                app:iconGravity="textStart"-->
+<!--                app:iconPadding="0dp"-->
+<!--                app:icon="@drawable/ic_home"/>-->
+
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="notifications_button"-->
+<!--                android:layout_weight="1"-->
+<!--                app:iconSize="48dp"-->
+<!--                app:iconGravity="textStart"-->
+<!--                app:iconPadding="0dp"-->
+<!--                app:icon="@drawable/ic_notifications"/>-->
+
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="search_button"-->
+<!--                android:layout_weight="1"-->
+<!--                app:iconSize="48dp"-->
+<!--                app:iconGravity="textStart"-->
+<!--                app:iconPadding="0dp"-->
+<!--                app:icon="@drawable/ic_search"/>-->
+
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:contentDescription="profile_button"-->
+<!--                android:layout_weight="1"-->
+<!--                app:iconSize="48dp"-->
+<!--                app:iconGravity="textStart"-->
+<!--                app:iconPadding="0dp"-->
+<!--                app:icon="@drawable/ic_profile"/>-->
+
+
+
+<!--        </LinearLayout>-->
+<!--    </com.google.android.material.dockedtoolbar.DockedToolbarLayout>-->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
