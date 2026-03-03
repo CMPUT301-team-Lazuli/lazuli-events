@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "398598050262",
+    "project_id": "lazuli-events",
+    "storage_bucket": "lazuli-events.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398598050262:android:41f546e1c9e5f172a65477",
+        "android_client_info": {
+          "package_name": "com.example.lazuli_events"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsgJtgSrDPuB3ELeMAXOFQy3z7IhwgSt4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
