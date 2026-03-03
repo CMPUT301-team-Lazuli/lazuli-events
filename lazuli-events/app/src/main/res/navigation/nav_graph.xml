@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/userEventsFragment">
+
+
+<!--    fragment destinations for bottom navbar buttons -->
+    <fragment
+        android:id="@+id/userEventsFragment"
+        android:name="com.example.lazuli_events.UserEventsFragment"
+        android:label="fragment_user_events"
+        tools:layout="@layout/fragment_user_events" >
+        <action
+            android:id="@+id/action_userEventsFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userNotificationsFragment"
+        android:name="com.example.lazuli_events.UserNotificationsFragment"
+        android:label="fragment_user_notifications"
+        tools:layout="@layout/fragment_user_notifications" />
+
+    <fragment
+        android:id="@+id/userExploreEventsFragment"
+        android:name="com.example.lazuli_events.UserExploreEventsFragment"
+        android:label="fragment_user_explore_events"
+        tools:layout="@layout/fragment_user_explore_events" >
+        <action
+            android:id="@+id/action_userExploreEventsFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.lazuli_events.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile">
+        <action
+            android:id="@+id/action_userProfileFragment_to_userEventsFragment"
+            app:destination="@id/userEventsFragment" />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.example.lazuli_events.EventDetailsFragment"
+        android:label="fragment_event_details"
+        tools:layout="@layout/fragment_event_details">
+        <action
+            android:id="@+id/action_userExploreEventsFragment_to_eventDetailsFragment"
+            app:destination="@id/userEventsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventManagerFragment"
+        android:name="com.example.lazuli_events.eventManagerFragment"
+        android:label="fragment_event_manager"
+        tools:layout="@layout/fragment_event_manager" />
+
+
+</navigation>
