@@ -19,6 +19,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 // this is the entry point of the application, using a single activity model.
@@ -43,6 +45,24 @@ public class NavGraphActivity extends AppCompatActivity {
         // get the controller of the navhost. navhost is the UI view with navigation buttons
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         navController = navHostFragment.getNavController();
+
+        // set listeners for temp buttons, to switch user type
+        Button entrantButton = findViewById(R.id.entrant_button);
+        Button organizerButton = findViewById(R.id.organizer_button);
+
+        entrantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCurrentFragment(R.id.userEventsFragment);
+            }
+        });
+
+        organizerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCurrentFragment(R.id.eventManagerFragment);
+            }
+        });
 
 
         // set listeners for the bottom bar menu

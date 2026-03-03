@@ -54,7 +54,11 @@
             android:id="@+id/action_userExploreEventsFragment_to_eventDetailsFragment"
             app:destination="@id/userEventsFragment" />
     </fragment>
-
+    <fragment
+        android:id="@+id/eventManagerFragment"
+        android:name="com.example.lazuli_events.eventManagerFragment"
+        android:label="fragment_event_manager"
+        tools:layout="@layout/fragment_event_manager" />
 
 
 </navigation>

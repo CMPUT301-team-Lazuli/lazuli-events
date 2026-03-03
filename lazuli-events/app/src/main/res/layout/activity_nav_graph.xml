@@ -30,12 +30,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/entrant_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="switch to entrant view" />
     </FrameLayout>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/organizer_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="switch to entrant/organizer"
+        android:text="switch to organizer view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
