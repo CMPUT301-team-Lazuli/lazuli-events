@@ -25,6 +25,8 @@ import android.widget.Button;
 
 // this is the entry point of the application, using a single activity model.
 // NavGraphActivity == MainActivity
+
+// TODO: set the session user (maybe as a singleton ... idek ...)
 public class NavGraphActivity extends AppCompatActivity {
 
     NavController navController;

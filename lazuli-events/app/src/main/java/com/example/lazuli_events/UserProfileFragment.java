@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 // display and update user info
 public class UserProfileFragment extends Fragment {
 
+    ProfileController profileController = new ProfileController("hi");
+
     public UserProfileFragment() {
         // Required empty public constructor
     }
@@ -21,10 +23,13 @@ public class UserProfileFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);  // inflate the layout
 
         // code here
+        profileController.testPrint();
+
 
         // get user details from database
         // display details in fragment (get id of each field in fragment_user_profile.xml)
 
         return rootView;
+
     }
 }
