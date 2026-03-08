@@ -7,24 +7,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 
-public class UserNotificationsFragment extends Fragment {
+public class NotificationsFragment extends Fragment {
 
     ListView notificationListView;
     NotificationListAdapter notificationListAdapter;
 
-    public UserNotificationsFragment() {
+    public NotificationsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_user_notifications, container, false);
-        NavGraphActivity navGraphActivity = (NavGraphActivity) getActivity();
+        View rootView =  inflater.inflate(R.layout.fragment_notifications, container, false);
+        MainActivity navGraphActivity = (MainActivity) getActivity();
         // code here
 
         // placeholder notification list data
@@ -45,6 +46,14 @@ public class UserNotificationsFragment extends Fragment {
         notificationListAdapter = new NotificationListAdapter(rootView.getContext(), notificationDataList);
         notificationListView.setAdapter(notificationListAdapter);
 
+        // set notification settings button listener
+//        Button settingsButton = rootView.findViewById(R.id.notification_settings_button);
+//        settingsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                pass
+//            }
+//        });
 
         return rootView;
     }

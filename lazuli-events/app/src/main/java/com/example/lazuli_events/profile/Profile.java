@@ -1,4 +1,4 @@
-package com.example.lazuli_events;
+package com.example.lazuli_events.profile;
 
 import java.util.ArrayList;
 
