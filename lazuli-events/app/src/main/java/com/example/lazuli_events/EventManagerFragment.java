@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class eventManagerFragment extends Fragment {
+public class EventManagerFragment extends Fragment {
 
 
 
-    public eventManagerFragment() {
+    public EventManagerFragment() {
         // Required empty public constructor
     }
 

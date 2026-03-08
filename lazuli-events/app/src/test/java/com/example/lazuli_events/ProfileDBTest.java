@@ -1,5 +1,7 @@
 package com.example.lazuli_events;
 
+import com.example.lazuli_events.profile.Profile;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

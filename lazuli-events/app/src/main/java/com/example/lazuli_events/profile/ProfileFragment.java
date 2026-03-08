@@ -1,4 +1,4 @@
-package com.example.lazuli_events;
+package com.example.lazuli_events.profile;
 
 import android.os.Bundle;
 
@@ -8,19 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.lazuli_events.R;
+
 
 // display and update user info
-public class UserProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     ProfileController profileController = new ProfileController("hi");
 
-    public UserProfileFragment() {
+    public ProfileFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);  // inflate the layout
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);  // inflate the layout
 
         // code here
         profileController.testPrint();

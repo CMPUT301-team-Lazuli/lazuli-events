@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+import com.example.lazuli_events.profile.Profile;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

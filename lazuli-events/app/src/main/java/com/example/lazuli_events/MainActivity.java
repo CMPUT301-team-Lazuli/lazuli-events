@@ -11,27 +11,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 
 // this is the entry point of the application, using a single activity model.
 // NavGraphActivity == MainActivity
 
 // TODO: set the session user (maybe as a singleton ... idek ...)
-public class NavGraphActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     NavController navController;
     NavHostFragment navHostFragment;
 //    BottomNavigationView bottomNavigationView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +44,9 @@ public class NavGraphActivity extends AppCompatActivity {
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         navController = navHostFragment.getNavController();
 
-        // set listeners for temp buttons, to switch user type
-        Button entrantButton = findViewById(R.id.entrant_button);
-        Button organizerButton = findViewById(R.id.organizer_button);
 
-        entrantButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCurrentFragment(R.id.userEventsFragment);
-            }
-        });
 
-        organizerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCurrentFragment(R.id.eventManagerFragment);
-            }
-        });
+
 
 
         // set listeners for the bottom bar menu
