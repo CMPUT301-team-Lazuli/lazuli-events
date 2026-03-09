@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventsHomeFragment"
+    tools:context=".home.EventsHomeFragment"
     android:paddingHorizontal="16dp"
     android:orientation="vertical">
 
+<!--    HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,147 +27,34 @@
             tools:layout_editor_absoluteX="16dp" />
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    </HorizontalScrollView>
-
-    <ScrollView
+<!--    CATEGORY TABS -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/events_home_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <LinearLayout
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/entered_events_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Registered (3) ->">
-            </TextView>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="12dp"
-                android:clickable="true">
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="170dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            android:background="@color/material_dynamic_primary90"/>
-                        <TextView
-                            android:layout_width="160dp"
-                            android:layout_height="wrap_content"
-                            android:text="placeholder cards"
-                            android:textStyle="bold"
-                            android:gravity="start"/>
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="(todo: carousel+adapter)"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </HorizontalScrollView>
-
-        <TextView
+            android:text="Entered">
+        </com.google.android.material.tabs.TabItem>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/hosted_events_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Waitlist (5) ->">
-        </TextView>
+            android:text="Hosting"/>
+    </com.google.android.material.tabs.TabLayout>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="12dp"
-            android:clickable="true">
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                android:layout_height="170dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:background="@color/material_dynamic_primary90"/>
-                    <TextView
-                        android:layout_width="160dp"
-                        android:layout_height="wrap_content"
-                        android:text="Event"
-                        android:textStyle="bold"
-                        android:gravity="start"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Date and location"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </HorizontalScrollView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Past Events ->">
-        </TextView>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="12dp"
-            android:clickable="true">
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                android:layout_height="170dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:background="@color/material_dynamic_primary90"/>
-                    <TextView
-                        android:layout_width="160dp"
-                        android:layout_height="wrap_content"
-                        android:text="Event"
-                        android:textStyle="bold"
-                        android:gravity="start"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Date and location"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </HorizontalScrollView>
-
-        </LinearLayout>
-
-    </ScrollView>
+    <FrameLayout
+        android:id="@+id/event_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
 
-    <TextView
-        android:id="@+id/your_events_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="entrants events"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+
+
 
 <!--    <Button-->
 <!--        android:id="@+id/button2"-->

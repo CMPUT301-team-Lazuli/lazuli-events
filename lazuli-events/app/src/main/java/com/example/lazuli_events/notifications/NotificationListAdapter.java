@@ -1,4 +1,4 @@
-package com.example.lazuli_events;
+package com.example.lazuli_events.notifications;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,9 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.lazuli_events.R;
+
 import java.util.ArrayList;
 
-// array adapter for notification items in a listview
+/**
+ * This is an ArrayAdapter that handles the display of a notification list item to a ListView.
+ * It sets the list item's layout to display the attributes of each notification object.
+ */
 public class NotificationListAdapter extends ArrayAdapter<String> {
     public NotificationListAdapter(Context context, ArrayList<String> eventList) {
         super(context, 0, eventList);

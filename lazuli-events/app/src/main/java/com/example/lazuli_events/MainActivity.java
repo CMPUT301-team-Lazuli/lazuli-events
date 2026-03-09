@@ -24,7 +24,7 @@ import com.google.android.material.navigation.NavigationBarView;
 // TODO: set the session user (maybe as a singleton ... idek ...)
 public class MainActivity extends AppCompatActivity {
 
-    NavController navController;
+    public NavController navController;
     NavHostFragment navHostFragment;
 //    BottomNavigationView bottomNavigationView;
 
