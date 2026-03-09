@@ -1,4 +1,4 @@
-package com.example.lazuli_events;
+package com.example.lazuli_events.profile;
 
 import android.os.Bundle;
 
@@ -8,23 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-public class EventManagerFragment extends Fragment {
-
+import com.example.lazuli_events.R;
 
 
-    public EventManagerFragment() {
+public class ProfileEditFragment extends Fragment {
+
+
+    public ProfileEditFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_event_manager, container, false);
-
-        // code here
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_profile_edit, container, false);
     }
-
-
 }

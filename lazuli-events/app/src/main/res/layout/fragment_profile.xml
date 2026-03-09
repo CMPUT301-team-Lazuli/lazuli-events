@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
 
+<!--    HEADER -->
     <LinearLayout
         android:id="@+id/profile_header"
         android:layout_width="match_parent"
@@ -14,12 +15,10 @@
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/linearLayout4">
-
         <Space
             android:layout_width="match_parent"
             android:layout_height="24dp"
             tools:layout_editor_absoluteX="16dp" />
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
