@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.lazuli_events.events.ExploreEventsCardAdapter;
+
 import java.util.ArrayList;
 
 

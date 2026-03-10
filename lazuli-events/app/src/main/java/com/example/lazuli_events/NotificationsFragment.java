@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.lazuli_events.notifications.NotificationListAdapter;
+
 import java.util.ArrayList;
 
 

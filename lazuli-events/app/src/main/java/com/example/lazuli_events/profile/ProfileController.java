@@ -2,6 +2,8 @@ package com.example.lazuli_events.profile;
 
 import android.util.Log;
 
+import com.example.lazuli_events.FirebaseDB;
+
 /**
  * A profile controller that generates/retrieves device IDs to authenticate a user,
  * validates profile changes and saves them to the database,
@@ -10,10 +12,13 @@ import android.util.Log;
 public class ProfileController {
 
     private String msg;
+    private Profile profile;
+    private FirebaseDB firebaseDB;
 
 
-    public ProfileController(String string) {
-        msg = string;
+    public ProfileController(String string, Profile profile) {
+        this.msg = string;
+        this.profile = profile;
     }
 
 
