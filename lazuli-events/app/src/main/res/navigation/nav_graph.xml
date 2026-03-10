@@ -57,14 +57,14 @@
             android:id="@+id/action_userProfileFragment_to_userEventsFragment"
             app:destination="@id/userEventsFragment" />
         <action
-            android:id="@+id/action_userProfileFragment_to_profileEditFragment"
+            android:id="@+id/action_userProfileFragment_to_editProfileFragment"
             app:destination="@id/userEventsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/profileEditFragment"
-        android:name="com.example.lazuli_events.profile.ProfileEditFragment"
-        android:label="fragment_profile_edit"
-        tools:layout="@layout/fragment_profile_edit" />
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.lazuli_events.profile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
 
 
 
@@ -82,7 +82,11 @@
         android:name="com.example.lazuli_events.home.EventManagerFragment"
         android:label="fragment_event_manager"
         tools:layout="@layout/fragment_event_manager" />
-
+    <fragment
+        android:id="@+id/composeNotificationFragment"
+        android:name="com.example.lazuli_events.home.ComposeNotificationFragment"
+        android:label="fragment_compose_notification"
+        tools:layout="@layout/fragment_compose_notification" />
 
 
 </navigation>

@@ -1,5 +1,6 @@
 package com.example.lazuli_events.home;
 
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +9,9 @@ import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
+import com.example.lazuli_events.MainActivity;
 import com.example.lazuli_events.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -18,6 +21,7 @@ import com.google.android.material.tabs.TabLayout;
  */
 public class EventManagerFragment extends Fragment {
 
+    ImageButton newNotifButton;
     TabLayout tabLayout;
     FragmentManager fragmentManager;
 
@@ -28,6 +32,20 @@ public class EventManagerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_event_manager, container, false);
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+
+
+        // initialize compose new notification button
+        newNotifButton = rootView.findViewById(R.id.compose_notification_button);
+
+        newNotifButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.navController.navigate(R.id.composeNotificationFragment);
+            }
+        });
+
 
         // set the first tab of the layout as the default view
         if (savedInstanceState == null) {
@@ -73,6 +91,7 @@ public class EventManagerFragment extends Fragment {
 
             }
         });
+        // code here
 
         return rootView;
     }
