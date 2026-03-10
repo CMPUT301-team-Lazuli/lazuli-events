@@ -48,8 +48,48 @@ public class FirebaseDB {
                 }
             }
         }));
+    }
 
-        //Events section
+    //Events section
+
+    /**
+     * Get entrants for a specific event filtered by their status.
+     */
+    public void getEntrantsByStatus(String eventId, String status, final EntrantCallback callback) {
+        ArrayList<String> entrantNames = new ArrayList<>();
+
+        // Path: events -> [eventId] -> waitlist
+        db.collection("events").document(eventId).collection("waitlist")
+                .whereEqualTo("status", status.toLowerCase())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            entrantNames.add(document.getString("name"));
+                        }
+                        callback.onCallback(entrantNames);
+                    } else {
+                        Log.e("Firestore", "Error getting entrants: ", task.getException());
+                    }
+                });
+    }
+
+    /**
+     * Permanently removes an entrant from an event's waitlist.
+     */
+    public void dropEntrantFromEvent(String eventId, String entrantName) {
+        db.collection("events").document(eventId).collection("waitlist")
+                .whereEqualTo("name", entrantName)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        doc.getReference().delete();
+                    }
+                });
+    }
+
+    public interface EntrantCallback {
+        void onCallback(ArrayList<String> list);
     }
 
     /**
