@@ -9,22 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-// display and update user info
-public class UserProfileFragment extends Fragment {
+public class EventManagerFragment extends Fragment {
 
-    public UserProfileFragment() {
+
+
+    public EventManagerFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);  // inflate the layout
+        View rootView =  inflater.inflate(R.layout.fragment_event_manager, container, false);
 
         // code here
 
-        // get user details from database
-        // display details in fragment (get id of each field in fragment_user_profile.xml)
-
         return rootView;
     }
+
+
 }

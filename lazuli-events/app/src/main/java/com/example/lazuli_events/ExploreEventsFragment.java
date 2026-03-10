@@ -15,21 +15,21 @@ import java.util.ArrayList;
 
 
 // display cards and handle event sorting
-public class UserExploreEventsFragment extends Fragment {
+public class ExploreEventsFragment extends Fragment {
 
     ListView cardListView;
     ExploreEventsCardAdapter cardAdapter;
 
-    public UserExploreEventsFragment() {
+    public ExploreEventsFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // inflate layout
-        View rootView = inflater.inflate(R.layout.fragment_user_explore_events, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_explore_events, container, false);
         // get ref to host
-        NavGraphActivity navGraphActivity = (NavGraphActivity) getActivity();
+        MainActivity navGraphActivity = (MainActivity) getActivity();
 
 
         // Display list of event cards
