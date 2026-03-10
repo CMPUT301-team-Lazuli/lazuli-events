@@ -73,6 +73,7 @@ public class EventManagerFragment extends Fragment {
 
             }
         });
+        // code here
 
         return rootView;
     }
