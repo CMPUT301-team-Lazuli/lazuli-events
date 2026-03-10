@@ -42,7 +42,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 // navigate to the edit profile page
                 assert mainActivity != null;
-                mainActivity.navController.navigate(R.id.profileEditFragment);
+                mainActivity.navController.navigate(R.id.editProfileFragment);
             }
         });
 
