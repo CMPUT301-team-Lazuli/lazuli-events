@@ -27,23 +27,33 @@
             tools:layout_editor_absoluteX="16dp" />
     </LinearLayout>
 
-    <TextView
+    <!--    CATEGORY TABS -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/event_manager_tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="Registered (3) ->">
-    </TextView>
+        android:layout_height="wrap_content">
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/event_status_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event Status">
+        </com.google.android.material.tabs.TabItem>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/event_entrants_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Entrants"/>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/event_view_and_edit_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View and Edit"/>
+    </com.google.android.material.tabs.TabLayout>
 
-    <GridLayout
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/event_manager_fragment_container"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </HorizontalScrollView>
-
-
 
 
 

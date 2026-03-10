@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.lazuli_events.profile.Profile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -24,7 +25,9 @@ import com.google.android.material.navigation.NavigationBarView;
 // TODO: set the session user (maybe as a singleton ... idek ...)
 public class MainActivity extends AppCompatActivity {
 
-    NavController navController;
+    public NavController navController;
+    public FirebaseDB firebaseDB;
+    public Profile sessionProfile;
     NavHostFragment navHostFragment;
 //    BottomNavigationView bottomNavigationView;
 
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        firebaseDB = new FirebaseDB();
 
         // get the controller of the navhost. navhost is the UI view with navigation buttons
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);

@@ -9,7 +9,7 @@
 <!--    fragment destinations for bottom navbar buttons -->
     <fragment
         android:id="@+id/userEventsFragment"
-        android:name="com.example.lazuli_events.EventsHomeFragment"
+        android:name="com.example.lazuli_events.home.EventsHomeFragment"
         android:label="fragment_user_events"
         tools:layout="@layout/fragment_events_home" >
         <action
@@ -17,15 +17,28 @@
             app:destination="@id/userProfileFragment" />
     </fragment>
 
+
+<!--    NOTIFICATIONS -->
     <fragment
         android:id="@+id/userNotificationsFragment"
-        android:name="com.example.lazuli_events.NotificationsFragment"
+        android:name="com.example.lazuli_events.notifications.NotificationsFragment"
         android:label="fragment_user_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications">
+        <action
+            android:id="@+id/action_userNotificationsFragment_to_notificationSettingsFragment"
+            app:destination="@id/notificationSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationSettingsFragment"
+        android:name="com.example.lazuli_events.notifications.NotificationSettingsFragment"
+        android:label="fragment_notification_preferences"
+        tools:layout="@layout/fragment_notification_settings" />
 
+
+<!--    EVENTS -->
     <fragment
         android:id="@+id/userExploreEventsFragment"
-        android:name="com.example.lazuli_events.ExploreEventsFragment"
+        android:name="com.example.lazuli_events.events.ExploreEventsFragment"
         android:label="fragment_user_explore_events"
         tools:layout="@layout/fragment_explore_events" >
         <action
@@ -33,6 +46,8 @@
             app:destination="@id/eventDetailsFragment" />
     </fragment>
 
+
+<!--    PROFILE -->
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.lazuli_events.profile.ProfileFragment"
@@ -41,13 +56,21 @@
         <action
             android:id="@+id/action_userProfileFragment_to_userEventsFragment"
             app:destination="@id/userEventsFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_profileEditFragment"
+            app:destination="@id/userEventsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.example.lazuli_events.profile.ProfileEditFragment"
+        android:label="fragment_profile_edit"
+        tools:layout="@layout/fragment_profile_edit" />
 
 
 
     <fragment
         android:id="@+id/eventDetailsFragment"
-        android:name="com.example.lazuli_events.EventDetailsFragment"
+        android:name="com.example.lazuli_events.events.EventDetailsFragment"
         android:label="fragment_event_details"
         tools:layout="@layout/fragment_event_details">
         <action
@@ -56,9 +79,10 @@
     </fragment>
     <fragment
         android:id="@+id/eventManagerFragment"
-        android:name="com.example.lazuli_events.EventManagerFragment"
+        android:name="com.example.lazuli_events.home.EventManagerFragment"
         android:label="fragment_event_manager"
         tools:layout="@layout/fragment_event_manager" />
+
 
 
 </navigation>

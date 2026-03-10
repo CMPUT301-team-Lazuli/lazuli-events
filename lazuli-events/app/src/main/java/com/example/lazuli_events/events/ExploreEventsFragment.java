@@ -1,4 +1,4 @@
-package com.example.lazuli_events;
+package com.example.lazuli_events.events;
 
 import android.os.Bundle;
 
@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.example.lazuli_events.MainActivity;
+import com.example.lazuli_events.R;
 
 import java.util.ArrayList;
 
@@ -29,7 +32,7 @@ public class ExploreEventsFragment extends Fragment {
         // inflate layout
         View rootView = inflater.inflate(R.layout.fragment_explore_events, container, false);
         // get ref to host
-        MainActivity navGraphActivity = (MainActivity) getActivity();
+        MainActivity mainActivity = (MainActivity) getActivity();
 
 
         // Display list of event cards
@@ -58,8 +61,8 @@ public class ExploreEventsFragment extends Fragment {
                 Log.d("clicked", msg);
 
                 // navigate to the event details page
-                assert navGraphActivity != null;
-                navGraphActivity.navController.navigate(R.id.action_userExploreEventsFragment_to_eventDetailsFragment);
+                assert mainActivity != null;
+                mainActivity.navController.navigate(R.id.action_userExploreEventsFragment_to_eventDetailsFragment);
             }
         });
 
