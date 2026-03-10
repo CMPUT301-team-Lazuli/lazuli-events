@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.lazuli_events.MainActivity;
@@ -29,6 +30,7 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_notifications, container, false);
         MainActivity mainActivity = (MainActivity) getActivity();
+        MainActivity navGraphActivity = (MainActivity) getActivity();
         // code here
 
         // placeholder notification list data
@@ -57,6 +59,13 @@ public class NotificationsFragment extends Fragment {
                 mainActivity.navController.navigate(R.id.action_userNotificationsFragment_to_notificationSettingsFragment);
             }
         });
+//        Button settingsButton = rootView.findViewById(R.id.notification_settings_button);
+//        settingsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                pass
+//            }
+//        });
 
         return rootView;
     }

@@ -37,13 +37,14 @@ public class EventsHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_events_home, container, false);
 
+        // set the user's joined events tab as the default display
         if (savedInstanceState == null) {
             fragmentManager = getActivity().getSupportFragmentManager();
             TabEnteredEventsFragment  homeFragment = new TabEnteredEventsFragment();
             fragmentManager.beginTransaction().replace(R.id.event_fragment_container, homeFragment)
                     .commit();
         }
-        // tab navigation
+        // handle tab navigation
         TabLayout tabLayout = rootView.findViewById(R.id.events_home_tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -51,7 +52,7 @@ public class EventsHomeFragment extends Fragment {
                 Fragment fragment = null;
                 String tabText = tab.getText().toString();
 
-                // display the tab's fragment in the container
+                // create the fragment for each tab
                 switch (tabText) {
                     case "Entered":
                         Log.d("tab", "entered");
@@ -63,6 +64,7 @@ public class EventsHomeFragment extends Fragment {
                         break;
                 }
 
+                // replace the tab layout container with the appropriate fragment
                 if (fragment != null) {
                     fragmentManager.beginTransaction().replace(R.id.event_fragment_container, fragment)
                             .commit();
