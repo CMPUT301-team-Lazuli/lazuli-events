@@ -1,4 +1,4 @@
-package com.example.lazuli_events;
+package com.example.lazuli_events.home;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.lazuli_events.R;
 
 
 public class TabViewAndEditFragment extends Fragment {

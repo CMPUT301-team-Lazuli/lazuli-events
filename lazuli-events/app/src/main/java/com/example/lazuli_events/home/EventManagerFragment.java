@@ -5,13 +5,11 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lazuli_events.R;
-import com.example.lazuli_events.TabViewAndEditFragment;
 import com.google.android.material.tabs.TabLayout;
 
 /**
