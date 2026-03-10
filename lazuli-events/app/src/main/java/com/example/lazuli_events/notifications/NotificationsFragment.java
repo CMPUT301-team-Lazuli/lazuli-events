@@ -30,7 +30,6 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_notifications, container, false);
         MainActivity mainActivity = (MainActivity) getActivity();
-        MainActivity navGraphActivity = (MainActivity) getActivity();
         // code here
 
         // placeholder notification list data

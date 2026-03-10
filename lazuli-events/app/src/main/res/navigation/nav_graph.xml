@@ -82,7 +82,11 @@
         android:name="com.example.lazuli_events.home.EventManagerFragment"
         android:label="fragment_event_manager"
         tools:layout="@layout/fragment_event_manager" />
-
+    <fragment
+        android:id="@+id/composeNotificationFragment"
+        android:name="com.example.lazuli_events.home.ComposeNotificationFragment"
+        android:label="fragment_compose_notification"
+        tools:layout="@layout/fragment_compose_notification" />
 
 
 </navigation>
