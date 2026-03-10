@@ -20,7 +20,8 @@ import com.example.lazuli_events.R;
  */
 public class ProfileFragment extends Fragment {
 
-    ProfileController profileController = new ProfileController("hi");
+    ProfileController profileController;
+    Profile profile;
 
 
     public ProfileFragment() {
