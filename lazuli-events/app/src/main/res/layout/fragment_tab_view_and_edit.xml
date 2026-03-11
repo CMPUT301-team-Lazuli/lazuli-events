@@ -4,7 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home.TabViewAndEditFragment">
+    <ImageView
+        android:id="@+id/ivPosterPreview"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:background="@android:color/darker_gray"
+        android:contentDescription="Poster preview" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Add Cover" />
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
