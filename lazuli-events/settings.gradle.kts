@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "lazuli-events"
 include(":app")
- 
