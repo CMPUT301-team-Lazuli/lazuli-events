@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import com.example.lazuli_events.R;
 
 import java.util.ArrayList;
 
-
-// display cards and handle event sorting
 public class ExploreEventsFragment extends Fragment {
 
     ListView cardListView;
@@ -29,43 +26,30 @@ public class ExploreEventsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // inflate layout
         View rootView = inflater.inflate(R.layout.fragment_explore_events, container, false);
-        // get ref to host
         MainActivity mainActivity = (MainActivity) getActivity();
 
-
-        // Display list of event cards
-
-        // temp skeleton list data
         ArrayList<String> cardDataList = new ArrayList<>();
-        cardDataList.add("event 1");
-        cardDataList.add("event 2");
-        cardDataList.add("event 3");
-        cardDataList.add("event 4");
-        cardDataList.add("event 5");
+        cardDataList.add("event_1");
+        cardDataList.add("event_2");
+        cardDataList.add("event_3");
 
-        // get list view and set adapter
         cardListView = rootView.findViewById(R.id.explore_events_listView);
-        cardAdapter = new ExploreEventsCardAdapter(rootView.getContext(), cardDataList);  // fragments use rootVew.getContext instead of "this"
+        cardAdapter = new ExploreEventsCardAdapter(rootView.getContext(), cardDataList);
         cardListView.setAdapter(cardAdapter);
 
-        Log.d("test", "test");
+        cardListView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedEventId = cardDataList.get(position);
 
-        // set card list listeners
-        cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String card = cardDataList.get(position);
-                String msg = "clicked";
-                Log.d("clicked", msg);
+            Bundle bundle = new Bundle();
+            bundle.putString("eventId", selectedEventId);
 
-                // navigate to the event details page
-                assert mainActivity != null;
-                mainActivity.navController.navigate(R.id.action_userExploreEventsFragment_to_eventDetailsFragment);
-            }
+            assert mainActivity != null;
+            mainActivity.navController.navigate(
+                    R.id.action_userExploreEventsFragment_to_eventDetailsFragment,
+                    bundle
+            );
         });
-
 
         return rootView;
     }

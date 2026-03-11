@@ -18,6 +18,8 @@ import com.example.lazuli_events.profile.Profile;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
+
 
 // this is the entry point of the application, using a single activity model.
 // NavGraphActivity == MainActivity
@@ -47,11 +49,6 @@ public class MainActivity extends AppCompatActivity {
         // get the controller of the navhost. navhost is the UI view with navigation buttons
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
         navController = navHostFragment.getNavController();
-
-
-
-
-
 
         // set listeners for the bottom bar menu
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
