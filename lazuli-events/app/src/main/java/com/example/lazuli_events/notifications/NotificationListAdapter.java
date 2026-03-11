@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class NotificationListAdapter extends ArrayAdapter<UserNotification> {
 
     public NotificationListAdapter(Context context, ArrayList<UserNotification> notifications) {
+        // pass notification list to adapter
         super(context, 0, notifications);
     }
 
@@ -25,12 +26,16 @@ public class NotificationListAdapter extends ArrayAdapter<UserNotification> {
     @Override
     @SuppressLint("ViewHolder")
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        // inflate one notification row from XML
         View listItem = LayoutInflater.from(getContext()).inflate(R.layout.notification_list_item, parent, false);
 
+        // get current notification object
         UserNotification notification = getItem(position);
 
+        // find text view in row layout
         TextView notificationTextView = listItem.findViewById(R.id.notification_list_textView);
 
+        // show title + message in the row
         if (notification != null) {
             notificationTextView.setText(notification.getTitle() + ": " + notification.getMessage());
         }

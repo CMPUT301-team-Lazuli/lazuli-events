@@ -1,16 +1,29 @@
 package com.example.lazuli_events.notifications;
 
 public class UserNotification {
+    // unique id for this notification document
     private String notificationId;
+
+    // the user who should receive this notification
     private String recipientId;
+
+    // the event related to this notification
     private String eventId;
+
+    // short heading shown in the app
     private String title;
+
+    // full notification message
     private String message;
+
+    // type of notification, e.g. lottery_win or lottery_lose
     private String type;
+
+    // time the notification was created
     private long timestamp;
 
     public UserNotification() {
-        // Firestore needs empty constructor
+        // required empty constructor for Firestore
     }
 
     public UserNotification(String notificationId, String recipientId, String eventId,

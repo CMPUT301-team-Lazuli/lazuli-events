@@ -23,19 +23,22 @@ public class NotificationsFragment extends Fragment {
     ArrayList<UserNotification> notificationDataList;
 
     public NotificationsFragment() {
-        // Required empty public constructor
+        // required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // inflate notifications screen layout
         View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
         MainActivity mainActivity = (MainActivity) getActivity();
 
+        // connect list view with adapter
         notificationListView = rootView.findViewById(R.id.notifications_listView);
         notificationDataList = new ArrayList<>();
         notificationListAdapter = new NotificationListAdapter(rootView.getContext(), notificationDataList);
         notificationListView.setAdapter(notificationListAdapter);
 
+        // load notifications for current signed-in user
         if (mainActivity != null && mainActivity.sessionProfile != null) {
             Profile profile = mainActivity.sessionProfile;
             String recipientId = profile.getEmail();
@@ -43,6 +46,7 @@ public class NotificationsFragment extends Fragment {
             mainActivity.firebaseDB.getNotificationsForUser(recipientId, new com.example.lazuli_events.FirebaseDB.NotificationsCallback() {
                 @Override
                 public void onSuccess(ArrayList<UserNotification> notifications) {
+                    // replace old list with newest data from Firestore
                     notificationDataList.clear();
                     notificationDataList.addAll(notifications);
                     notificationListAdapter.notifyDataSetChanged();
@@ -50,13 +54,16 @@ public class NotificationsFragment extends Fragment {
 
                 @Override
                 public void onFailure(String error) {
+                    // show database error message
                     Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
+            // no logged-in profile found
             Toast.makeText(getContext(), "No session profile found", Toast.LENGTH_SHORT).show();
         }
 
+        // open notification settings page
         ImageButton settingsButton = rootView.findViewById(R.id.notification_settings_button);
         settingsButton.setOnClickListener(v -> {
             if (mainActivity != null) {

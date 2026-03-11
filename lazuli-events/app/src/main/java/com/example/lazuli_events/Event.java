@@ -3,29 +3,31 @@ package com.example.lazuli_events;
 import java.util.ArrayList;
 
 public class Event {
+    // unique id for the event
     private String eventId;
+
+    // event name shown to users
     private String title;
+
+    // event details/description
     private String description;
-    private String location;
-    private String organizerId;
-    private int capacity;
+
+    // event price as text
+    private String price;
+
+    // list of entrant ids currently in the waitlist
     private ArrayList<String> waitlist;
-    private ArrayList<String> accepted;
 
     public Event() {
         // required empty constructor for Firestore
     }
 
-    public Event(String eventId, String title, String description, String location,
-                 String organizerId, int capacity) {
+    public Event(String eventId, String title, String description, String price, ArrayList<String> waitlist) {
         this.eventId = eventId;
         this.title = title;
         this.description = description;
-        this.location = location;
-        this.organizerId = organizerId;
-        this.capacity = capacity;
-        this.waitlist = new ArrayList<>();
-        this.accepted = new ArrayList<>();
+        this.price = price;
+        this.waitlist = waitlist;
     }
 
     public String getEventId() {
@@ -40,24 +42,12 @@ public class Event {
         return description;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public String getOrganizerId() {
-        return organizerId;
-    }
-
-    public int getCapacity() {
-        return capacity;
+    public String getPrice() {
+        return price;
     }
 
     public ArrayList<String> getWaitlist() {
         return waitlist;
-    }
-
-    public ArrayList<String> getAccepted() {
-        return accepted;
     }
 
     public void setEventId(String eventId) {
@@ -72,23 +62,11 @@ public class Event {
         this.description = description;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setOrganizerId(String organizerId) {
-        this.organizerId = organizerId;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public void setWaitlist(ArrayList<String> waitlist) {
         this.waitlist = waitlist;
-    }
-
-    public void setAccepted(ArrayList<String> accepted) {
-        this.accepted = accepted;
     }
 }
