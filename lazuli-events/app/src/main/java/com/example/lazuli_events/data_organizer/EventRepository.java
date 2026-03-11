@@ -1,4 +1,4 @@
-package com.example.lazuli_events.data;
+package com.example.lazuli_events.data_organizer;
 
 import android.net.Uri;
 

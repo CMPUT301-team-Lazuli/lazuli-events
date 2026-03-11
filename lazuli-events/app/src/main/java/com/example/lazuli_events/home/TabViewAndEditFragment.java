@@ -18,7 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import com.example.lazuli_events.R;
-import com.example.lazuli_events.data.EventRepository;
+import com.example.lazuli_events.data_organizer.EventRepository;
 import com.example.lazuli_events.model.Event;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -82,7 +82,7 @@ public class TabViewAndEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_tab_view_and_edit, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_tab_event_manager, container, false);
 
         ivPosterPreview = rootView.findViewById(R.id.ivPosterPreview);
         tvPosterPlaceholder = rootView.findViewById(R.id.tvPosterPlaceholder);

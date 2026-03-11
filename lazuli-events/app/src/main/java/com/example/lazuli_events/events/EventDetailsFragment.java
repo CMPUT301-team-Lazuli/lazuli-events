@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.lazuli_events.R;
-import com.example.lazuli_events.data.EventRepository;
+import com.example.lazuli_events.data_organizer.EventRepository;
 import com.example.lazuli_events.model.Event;
 import com.google.firebase.auth.FirebaseAuth;
 

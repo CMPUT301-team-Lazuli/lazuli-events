@@ -11,7 +11,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.lazuli_events.data.EventRepository;
+import com.example.lazuli_events.data_organizer.EventRepository;
 import com.example.lazuli_events.databinding.ActivityCreateEditEventBinding;
 import com.example.lazuli_events.model.Event;
 import com.google.firebase.auth.FirebaseAuth;
