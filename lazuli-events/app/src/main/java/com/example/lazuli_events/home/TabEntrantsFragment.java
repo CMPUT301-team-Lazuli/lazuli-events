@@ -14,11 +14,7 @@ import com.example.lazuli_events.R;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TabEntrantsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class TabEntrantsFragment extends Fragment {
 
     ListView entrantListView;
