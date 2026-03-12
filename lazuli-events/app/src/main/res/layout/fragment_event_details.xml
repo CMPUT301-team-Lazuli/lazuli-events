@@ -97,7 +97,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/event_waitlist_button"
+            android:id="@+id/btnJoinWaitlist"
             android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:gravity="center"

@@ -33,6 +33,11 @@ public class EventRepository {
         void onError(Exception e);
     }
 
+    public interface WaitlistStatusCallback {
+        void onResult(boolean isInWaitlist);
+        void onError(Exception e);
+    }
+
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final StorageReference posterRoot =
             FirebaseStorage.getInstance().getReference("event_posters");
@@ -139,8 +144,30 @@ public class EventRepository {
                         callback.onError(new Exception("Event not found"));
                         return;
                     }
+
+                    // make sure model id is filled even if Firestore document id is not stored inside the document
+                    if (event.getId() == null || event.getId().trim().isEmpty()) {
+                        event.setId(snapshot.getId());
+                    }
+
                     callback.onSuccess(event);
                 })
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * Check whether one entrant is already in an event waitlist.
+     */
+    public void isUserInWaitlist(@NonNull String eventId,
+                                 @NonNull String entrantId,
+                                 @NonNull WaitlistStatusCallback callback) {
+
+        db.collection("events")
+                .document(eventId)
+                .collection("waitlist")
+                .document(entrantId)
+                .get()
+                .addOnSuccessListener(snapshot -> callback.onResult(snapshot.exists()))
                 .addOnFailureListener(callback::onError);
     }
 
@@ -201,6 +228,9 @@ public class EventRepository {
                 .addOnFailureListener(callback::onError);
     }
 
+    /**
+     * Remove entrant from waitlist and decrease waitlist count.
+     */
     public void leaveWaitlist(@NonNull String eventId,
                               @NonNull String entrantId,
                               @NonNull SimpleCallback callback) {
@@ -211,7 +241,7 @@ public class EventRepository {
         db.runTransaction(transaction -> {
                     DocumentSnapshot waitlistSnap = transaction.get(waitlistRef);
                     if (!waitlistSnap.exists()) {
-                        return null;
+                        throw new IllegalStateException("You are not in this waitlist.");
                     }
 
                     DocumentSnapshot eventSnap = transaction.get(eventRef);

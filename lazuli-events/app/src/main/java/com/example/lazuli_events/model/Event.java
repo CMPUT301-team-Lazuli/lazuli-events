@@ -1,5 +1,6 @@
 package com.example.lazuli_events.model;
 
+import java.util.ArrayList;
 
 public class Event {
     private String id;
@@ -19,6 +20,9 @@ public class Event {
 
     // cached count for fast reads
     private int waitlistCount;
+
+    // full list of entrant ids in the waitlist
+    private ArrayList<String> waitlist;
 
     private Long createdAt;
     private Long updatedAt;
@@ -123,6 +127,14 @@ public class Event {
         this.waitlistCount = waitlistCount;
     }
 
+    public ArrayList<String> getWaitlist() {
+        return waitlist;
+    }
+
+    public void setWaitlist(ArrayList<String> waitlist) {
+        this.waitlist = waitlist;
+    }
+
     public Long getCreatedAt() {
         return createdAt;
     }
@@ -145,5 +157,4 @@ public class Event {
                 && nowMillis >= registrationStartMillis
                 && nowMillis <= registrationEndMillis;
     }
-
 }
