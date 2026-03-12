@@ -1,8 +1,13 @@
 package com.example.lazuli_events;
 
+import static android.content.ContentValues.TAG;
+
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.lazuli_events.profile.Profile;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,7 +23,7 @@ import java.util.ArrayList;
  */
 public class FirebaseDB {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference dbRefProfiles = FirebaseFirestore.getInstance().collection("profiles");
+    private CollectionReference colRefProfiles = db.collection("profiles");
     private ArrayList<Profile> profiles;
     private ArrayList<String> emails;
     private ArrayList<String> events;
@@ -31,7 +36,7 @@ public class FirebaseDB {
         //Profile section
         profiles = new ArrayList<Profile>();
         emails = new ArrayList<String>();
-        dbRefProfiles.addSnapshotListener(((value, error) -> {
+        colRefProfiles.addSnapshotListener(((value, error) -> {
             if (error != null){
                 Log.e("Firestore", error.toString());
             }
@@ -76,8 +81,9 @@ public class FirebaseDB {
         profiles.add(profile);
 
         //add to database
-        DocumentReference docRef = dbRefProfiles.document(profile.getEmail());
-        docRef.set(profile);
+        //DocumentReference docRef = dbRefProfiles.document(profile.getEmail());
+        //docRef.set(profile);
+        db.collection("profiles").document(profile.getEmail()).set(profile);
     }
 
     /**
@@ -95,7 +101,7 @@ public class FirebaseDB {
         }
 
         //remove from database
-        DocumentReference docRef = dbRefProfiles.document(profile.getEmail());
+        DocumentReference docRef = colRefProfiles.document(profile.getEmail());
         docRef.delete();
     }
 
@@ -111,9 +117,16 @@ public class FirebaseDB {
         if (!assertProfileInDatabase(profile)){
             throw new IllegalArgumentException("Profile not in database.");
         }
-
-        DocumentReference docRef = dbRefProfiles.document(profile.getEmail());
-
+        DocumentReference docRef = colRefProfiles.document(profile.getEmail());
+        docRef
+                .update(fieldToChange, newFieldStr)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+        /*
         switch (fieldToChange){
             case "name":
                 profile.setName(newFieldStr);
@@ -139,7 +152,7 @@ public class FirebaseDB {
             default:
                 throw new IllegalArgumentException("Invalid field to change.");
         }
-        docRef.set(profile);
+        */
     }
 
     public void overwriteProfile(Profile oldProfile, Profile newProfile){
@@ -147,10 +160,16 @@ public class FirebaseDB {
             throw new IllegalArgumentException("Email already in use");
         }
         else {
-            DocumentReference docRef = dbRefProfiles.document(oldProfile.getEmail());
+            DocumentReference docRef = colRefProfiles.document(oldProfile.getEmail());
             docRef.set(newProfile);
         }
     }
+
+    /**
+     * Adds an event id to the profile's history in the database.
+     * @param eventId
+     * @param profile
+     */
     public void addEventIdToProfileHistory(String eventId, Profile profile){
 
     }
