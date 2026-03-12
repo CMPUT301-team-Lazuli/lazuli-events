@@ -52,9 +52,9 @@ public class TabEntrantsFragment extends Fragment {
         masterEntrantList = new ArrayList<>();
         displayedEntrantList = new ArrayList<>();
 
-        Profile p1 = new Profile("Alice", "alice@test.com", "123", "dev1", "on", new ArrayList<>());
-        Profile p2 = new Profile("Bob", "bob@test.com", "456", "dev2", "on", new ArrayList<>());
-        Profile p3 = new Profile("Charlie", "charlie@test.com", "789", "dev3", "on", new ArrayList<>());
+        Profile p1 = new Profile("entrant1", "entrant1@test.com", "123", "test1", "on", new ArrayList<>());
+        Profile p2 = new Profile("entrant2", "entrant2@test.com", "456", "test2", "on", new ArrayList<>());
+        Profile p3 = new Profile("entrant3", "entrant3@test.com", "789", "test3", "on", new ArrayList<>());
 
         masterEntrantList.add(new Entrant(p1, "Accepted"));
         masterEntrantList.add(new Entrant(p2, "Waitlisted"));
