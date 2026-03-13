@@ -1,5 +1,6 @@
 package com.example.lazuli_events.model;
 
+import java.util.ArrayList;
 
 public class Event {
     private String id;
@@ -15,16 +16,20 @@ public class Event {
     private Long registrationEndMillis;
 
     // null = unlimited waitlist
-    private Integer waitlistCap;
+    private Long waitlistCap;
 
     // cached count for fast reads
     private int waitlistCount;
+
+    // full list of entrant ids in the waitlist
+    private ArrayList<String> waitlist;
 
     private Long createdAt;
     private Long updatedAt;
 
     public Event() {
         // Required empty constructor for Firestore
+        this.waitlist = new ArrayList<>();
     }
 
     public String getId() {
@@ -107,11 +112,11 @@ public class Event {
         this.registrationEndMillis = registrationEndMillis;
     }
 
-    public Integer getWaitlistCap() {
+    public Long getWaitlistCap() {
         return waitlistCap;
     }
 
-    public void setWaitlistCap(Integer waitlistCap) {
+    public void setWaitlistCap(Long waitlistCap) {
         this.waitlistCap = waitlistCap;
     }
 
@@ -121,6 +126,17 @@ public class Event {
 
     public void setWaitlistCount(int waitlistCount) {
         this.waitlistCount = waitlistCount;
+    }
+
+    public ArrayList<String> getWaitlist() {
+        if (waitlist == null) {
+            waitlist = new ArrayList<>();
+        }
+        return waitlist;
+    }
+
+    public void setWaitlist(ArrayList<String> waitlist) {
+        this.waitlist = (waitlist != null) ? waitlist : new ArrayList<>();
     }
 
     public Long getCreatedAt() {
@@ -145,5 +161,4 @@ public class Event {
                 && nowMillis >= registrationStartMillis
                 && nowMillis <= registrationEndMillis;
     }
-
 }

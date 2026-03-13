@@ -1,9 +1,6 @@
 package com.example.lazuli_events.events;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,61 +8,61 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.lazuli_events.MainActivity;
 import com.example.lazuli_events.R;
 
 import java.util.ArrayList;
 
-
-// display cards and handle event sorting
 public class ExploreEventsFragment extends Fragment {
 
     ListView cardListView;
     ExploreEventsCardAdapter cardAdapter;
 
     public ExploreEventsFragment() {
-        // Required empty public constructor
+        // required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // inflate layout
+        // inflate explore events screen
         View rootView = inflater.inflate(R.layout.fragment_explore_events, container, false);
-        // get ref to host
         MainActivity mainActivity = (MainActivity) getActivity();
 
-
-        // Display list of event cards
-
-        // temp skeleton list data
+        // temporary placeholder event ids
         ArrayList<String> cardDataList = new ArrayList<>();
-        cardDataList.add("event 1");
-        cardDataList.add("event 2");
-        cardDataList.add("event 3");
-        cardDataList.add("event 4");
-        cardDataList.add("event 5");
+        cardDataList.add("event_1");
+        cardDataList.add("event_2");
+        cardDataList.add("event_3");
+        cardDataList.add("event_4");
+        cardDataList.add("event_5");
 
-        // get list view and set adapter
+        // connect list view to adapter
         cardListView = rootView.findViewById(R.id.explore_events_listView);
-        cardAdapter = new ExploreEventsCardAdapter(rootView.getContext(), cardDataList);  // fragments use rootVew.getContext instead of "this"
+        cardAdapter = new ExploreEventsCardAdapter(rootView.getContext(), cardDataList);
         cardListView.setAdapter(cardAdapter);
 
         Log.d("test", "test");
 
-        // set card list listeners
+        // open selected event details page
         cardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String card = cardDataList.get(position);
-                String msg = "clicked";
-                Log.d("clicked", msg);
+                // get clicked event id
+                String selectedEventId = cardDataList.get(position);
 
-                // navigate to the event details page
+                // pass event id to details fragment
+                Bundle bundle = new Bundle();
+                bundle.putString("eventId", selectedEventId);
+
                 assert mainActivity != null;
-                mainActivity.navController.navigate(R.id.action_userExploreEventsFragment_to_eventDetailsFragment);
+                mainActivity.navController.navigate(
+                        R.id.action_userExploreEventsFragment_to_eventDetailsFragment,
+                        bundle
+                );
             }
         });
-
 
         return rootView;
     }

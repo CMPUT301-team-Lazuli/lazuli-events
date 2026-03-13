@@ -290,7 +290,7 @@ public class TabViewAndEditFragment extends Fragment {
         event.setLocation(location);
         event.setDescription(description);
         event.setContact(contact);
-        event.setWaitlistCap(waitlistCap);
+        event.setWaitlistCap(Long.valueOf(waitlistCap));
         event.setWaitlistCount(0);
         event.setRegistrationStartMillis(registrationStartMillis);
         event.setRegistrationEndMillis(registrationEndMillis);

@@ -136,10 +136,10 @@ public class CreateEditEventActivity extends AppCompatActivity {
             return;
         }
 
-        Integer waitlistCap = null;
+        Long waitlistCap = null;
         if (!TextUtils.isEmpty(waitlistCapRaw)) {
             try {
-                int parsed = Integer.parseInt(waitlistCapRaw);
+                long parsed = Long.parseLong(waitlistCapRaw);
                 if (parsed <= 0) {
                     Toast.makeText(this,
                             "Waitlist cap must be greater than 0, or leave it blank",
