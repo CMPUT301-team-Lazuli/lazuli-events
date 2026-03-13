@@ -43,7 +43,7 @@ public class NotificationsFragment extends Fragment {
             Profile profile = mainActivity.sessionProfile;
             String recipientId = profile.getEmail();
 
-            mainActivity.firebaseDB.getNotificationsByRecipient(recipientId, new com.example.lazuli_events.FirebaseDB.NotificationsCallback() {
+            mainActivity.firebaseDB.getNotificationsForUser(recipientId, new com.example.lazuli_events.FirebaseDB.NotificationsCallback() {
                 @Override
                 public void onSuccess(ArrayList<UserNotification> notifications) {
                     // replace old list with newest data from Firestore

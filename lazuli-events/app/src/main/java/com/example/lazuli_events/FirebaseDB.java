@@ -47,6 +47,7 @@ public class FirebaseDB {
     /** Firebase Storage instance used for poster image uploads. */
     private final FirebaseStorage storage =
             FirebaseStorage.getInstance("gs://lazuli-events.firebasestorage.app");
+
     /** Root Storage reference. */
     private final StorageReference storageRef = storage.getReference();
 
@@ -324,17 +325,17 @@ public class FirebaseDB {
      * Retrieves all notifications for a specific recipient, ordered by timestamp descending.
      *
      * @param recipientId the recipient user ID
-     * @param callback callback used to return the list of notifications or an error
+     * @param callback callback used to report success or failure
      */
-    public void getNotificationsByRecipient(String recipientId, NotificationsCallback callback) {
+    public void getNotificationsForUser(String recipientId, NotificationsCallback callback) {
         dbRefNotifications
                 .whereEqualTo("recipientId", recipientId)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     ArrayList<UserNotification> notifications = new ArrayList<>();
-                    for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        notifications.add(snapshot.toObject(UserNotification.class));
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        notifications.add(doc.toObject(UserNotification.class));
                     }
                     callback.onSuccess(notifications);
                 })
@@ -342,49 +343,25 @@ public class FirebaseDB {
     }
 
     /**
-     * Marks a notification as read in Firestore.
+     * Deletes a notification from Firestore.
      *
-     * @param notificationId the ID of the notification to mark as read
-     */
-    public void markNotificationAsRead(String notificationId) {
-        dbRefNotifications.document(notificationId).update("read", true);
-    }
-
-    /**
-     * Saves an event to Firestore.
-     *
-     * <p>This stores all event fields, including registrationStartMillis,
-     * registrationEndMillis, registrationPeriodText, and posterUrl if already set.</p>
-     *
-     * @param event the event to save
+     * @param notificationId the ID of the notification to delete
      * @param callback callback used to report success or failure
      */
-    public void addEvent(Event event, SimpleCallback callback) {
-        if (event == null) {
-            callback.onFailure("Event is null.");
-            return;
-        }
-
-        if (event.getId() == null || event.getId().trim().isEmpty()) {
-            event.setId(dbRefEvents.document().getId());
-        }
-        String eventId = event.getId();
-
-        long now = System.currentTimeMillis();
-        if (event.getCreatedAt() == null) {
-            event.setCreatedAt(now);
-        }
-        event.setUpdatedAt(now);
-
-        dbRefEvents.document(eventId)
-                .set(event)
-                .addOnSuccessListener(unused -> callback.onSuccess("Event saved."))
+    public void deleteNotification(String notificationId, SimpleCallback callback) {
+        dbRefNotifications.document(notificationId)
+                .delete()
+                .addOnSuccessListener(unused -> callback.onSuccess("Notification deleted"))
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
     /**
-     * Uploads an event poster image to Firebase Storage, gets its download URL,
-     * stores that URL in the event's posterUrl field, and then saves the event to Firestore.
+     * Saves an event to Firestore, optionally uploading a poster image to Storage.
+     *
+     * <p>If {@code imageUri} is provided, the poster is uploaded first, and its
+     * public download URL is saved in the {@code event} object before it is
+     * written to Firestore. If no {@code imageUri} is provided, the event is
+     * saved immediately.</p>
      *
      * @param event the event to save
      * @param imageUri the local image Uri selected by the user
@@ -399,7 +376,7 @@ public class FirebaseDB {
         if (event.getId() == null || event.getId().trim().isEmpty()) {
             event.setId(dbRefEvents.document().getId());
         }
-        String eventId = event.getId();
+        final String eventId = event.getId();
 
         long now = System.currentTimeMillis();
         if (event.getCreatedAt() == null) {
