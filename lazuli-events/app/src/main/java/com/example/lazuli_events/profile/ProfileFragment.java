@@ -51,20 +51,6 @@ public class ProfileFragment extends Fragment {
         // get reference to the nav host (MainActivity)
         MainActivity mainActivity = (MainActivity) getActivity();
 
-
-        // init edit button, which navigates to ProfileEditFragment
-        Button editButton = rootView.findViewById(R.id.profile_edit_button);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // navigate to the edit profile page
-                assert mainActivity != null;
-                mainActivity.navController.navigate(R.id.editProfileFragment);
-            }
-        });
-
-
-        // TODO:
         // Fetch current user's session from MainActivity (specifically the nav)
         if (getArguments() == null){
             throw new NullPointerException("Issues reading profile. getArguments is null!");
@@ -75,7 +61,17 @@ public class ProfileFragment extends Fragment {
         if (profile == null){
             throw new NullPointerException("Issue: profile equals null.");
         }
-        System.out.println(profile.getName());
+
+        // init edit button, which navigates to ProfileEditFragment
+        Button editButton = rootView.findViewById(R.id.profile_edit_button);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to the edit profile page
+                assert mainActivity != null;
+                mainActivity.navController.navigate(R.id.editProfileFragment, profileBundle);
+            }
+        });
 
         // Display details in fragment (get id of each field in fragment_profile.xml)
 
