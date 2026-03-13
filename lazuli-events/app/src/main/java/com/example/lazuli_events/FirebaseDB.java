@@ -6,6 +6,7 @@ import com.example.lazuli_events.notifications.UserNotification;
 import com.example.lazuli_events.profile.Profile;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -26,13 +27,11 @@ public class FirebaseDB {
     private final ArrayList<Profile> profiles;
     private final ArrayList<String> emails;
 
-    // simple callback for success/failure messages
     public interface SimpleCallback {
         void onSuccess(String message);
         void onFailure(String error);
     }
 
-    // callback used when loading a list of notifications
     public interface NotificationsCallback {
         void onSuccess(ArrayList<UserNotification> notifications);
         void onFailure(String error);
@@ -58,10 +57,21 @@ public class FirebaseDB {
                     String notifPref = snapshot.getString("notifPref");
                     String phone = snapshot.getString("phone");
                     String devId = snapshot.getString("deviceId");
-                    ArrayList<String> eventIds = (ArrayList<String>) snapshot.get("eventIds");
+
+                    ArrayList<String> eventIds = new ArrayList<>();
+                    Object rawEventIds = snapshot.get("eventIds");
+                    if (rawEventIds instanceof ArrayList<?>) {
+                        for (Object item : (ArrayList<?>) rawEventIds) {
+                            if (item != null) {
+                                eventIds.add(String.valueOf(item));
+                            }
+                        }
+                    }
 
                     profiles.add(new Profile(name, email, phone, devId, notifPref, eventIds));
-                    emails.add(email);
+                    if (email != null) {
+                        emails.add(email);
+                    }
                 }
             }
         });
@@ -77,8 +87,7 @@ public class FirebaseDB {
         }
 
         profiles.add(profile);
-        DocumentReference docRef = dbRefProfiles.document(profile.getEmail());
-        docRef.set(profile);
+        dbRefProfiles.document(profile.getEmail()).set(profile);
     }
 
     public void deleteProfileFromDB(Profile profile) {
@@ -88,8 +97,7 @@ public class FirebaseDB {
             throw new IllegalArgumentException("Profile does not exist");
         }
 
-        DocumentReference docRef = dbRefProfiles.document(profile.getEmail());
-        docRef.delete();
+        dbRefProfiles.document(profile.getEmail()).delete();
     }
 
     public void updateProfileField(String fieldToChange, String newFieldStr, Profile profile) {
@@ -97,50 +105,72 @@ public class FirebaseDB {
             throw new IllegalArgumentException("Profile not in database.");
         }
 
-        DocumentReference docRef = dbRefProfiles.document(profile.getEmail());
+        String oldEmail = profile.getEmail();
 
         switch (fieldToChange) {
             case "name":
                 profile.setName(newFieldStr);
                 break;
+
             case "email":
-                if (emails.contains(newFieldStr)) {
+                if (!oldEmail.equals(newFieldStr) && emails.contains(newFieldStr)) {
                     throw new IllegalArgumentException("Email already in use.");
                 }
                 profile.setEmail(newFieldStr);
-                break;
+
+                dbRefProfiles.document(oldEmail).delete();
+                dbRefProfiles.document(newFieldStr).set(profile);
+
+                emails.remove(oldEmail);
+                emails.add(newFieldStr);
+                return;
+
             case "phoneNumber":
+            case "phone":
                 profile.setPhone(newFieldStr);
                 break;
+
             case "deviceId":
                 profile.setDeviceId(newFieldStr);
                 break;
+
             case "notifPref":
                 profile.setNotifPref(newFieldStr);
                 break;
+
             default:
                 throw new IllegalArgumentException("Invalid field to change.");
         }
 
-        docRef.set(profile);
+        dbRefProfiles.document(profile.getEmail()).set(profile);
     }
 
     public void overwriteProfile(Profile oldProfile, Profile newProfile) {
         if (!oldProfile.getEmail().equals(newProfile.getEmail()) && emails.contains(newProfile.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
-        } else {
-            DocumentReference docRef = dbRefProfiles.document(oldProfile.getEmail());
-            docRef.set(newProfile);
         }
+
+        if (!oldProfile.getEmail().equals(newProfile.getEmail())) {
+            dbRefProfiles.document(oldProfile.getEmail()).delete();
+        }
+
+        dbRefProfiles.document(newProfile.getEmail()).set(newProfile);
+    }
+
+    public void addEventIdToProfileHistory(String eventId, Profile profile) {
+        if (profile == null || eventId == null || eventId.trim().isEmpty()) {
+            return;
+        }
+
+        dbRefProfiles.document(profile.getEmail())
+                .update("eventIds", FieldValue.arrayUnion(eventId))
+                .addOnFailureListener(e -> Log.e("Firestore", e.toString()));
     }
 
     public boolean assertProfileInDatabase(Profile profile) {
         return emails.contains(profile.getEmail());
     }
 
-    // ---------------- NOTIFICATIONS ----------------
-
-    // save one notification to the notifications collection
     public void addNotification(UserNotification notification, SimpleCallback callback) {
         dbRefNotifications.document(notification.getNotificationId())
                 .set(notification)
@@ -148,7 +178,6 @@ public class FirebaseDB {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
-    // load all notifications for one user, newest first
     public void getNotificationsForUser(String recipientId, NotificationsCallback callback) {
         dbRefNotifications
                 .whereEqualTo("recipientId", recipientId)
@@ -157,7 +186,6 @@ public class FirebaseDB {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     ArrayList<UserNotification> notifications = new ArrayList<>();
 
-                    // convert each Firestore document into a UserNotification object
                     for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         UserNotification notification = snapshot.toObject(UserNotification.class);
                         notifications.add(notification);
@@ -168,7 +196,6 @@ public class FirebaseDB {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
-    // create and save a "winner" lottery notification
     public void sendLotteryWinNotification(String recipientId, String eventId, String eventTitle,
                                            SimpleCallback callback) {
         String notificationId = UUID.randomUUID().toString();
@@ -186,7 +213,6 @@ public class FirebaseDB {
         addNotification(notification, callback);
     }
 
-    // create and save a "loser" lottery notification
     public void sendLotteryLoseNotification(String recipientId, String eventId, String eventTitle,
                                             SimpleCallback callback) {
         String notificationId = UUID.randomUUID().toString();
@@ -204,25 +230,19 @@ public class FirebaseDB {
         addNotification(notification, callback);
     }
 
-    /**
-     * send winner notifications to winners and loser notifications to losers
-     */
     public void sendLotteryResults(String eventId,
                                    String eventTitle,
                                    ArrayList<String> winnerIds,
                                    ArrayList<String> loserIds,
                                    SimpleCallback callback) {
 
-        // total number of notifications that need to be sent
         int totalToSend = winnerIds.size() + loserIds.size();
 
-        // stop if there are no results to send
         if (totalToSend == 0) {
             callback.onFailure("No lottery results to send.");
             return;
         }
 
-        // track completed sends and whether any failure happened
         final int[] completed = {0};
         final boolean[] failed = {false};
 
@@ -230,8 +250,6 @@ public class FirebaseDB {
             @Override
             public void onSuccess(String message) {
                 completed[0]++;
-
-                // when all notifications are sent successfully, return success once
                 if (completed[0] == totalToSend && !failed[0]) {
                     callback.onSuccess("Lottery notifications sent.");
                 }
@@ -239,7 +257,6 @@ public class FirebaseDB {
 
             @Override
             public void onFailure(String error) {
-                // stop on the first failure
                 if (!failed[0]) {
                     failed[0] = true;
                     callback.onFailure(error);
@@ -247,13 +264,12 @@ public class FirebaseDB {
             }
         };
 
-        // send notifications to winners
         for (String winnerId : winnerIds) {
             sendLotteryWinNotification(winnerId, eventId, eventTitle, innerCallback);
         }
 
-        // send notifications to losers
         for (String loserId : loserIds) {
             sendLotteryLoseNotification(loserId, eventId, eventTitle, innerCallback);
         }
-    }}
+    }
+}

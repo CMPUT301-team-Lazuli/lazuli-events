@@ -1,5 +1,6 @@
 package com.example.lazuli_events.profile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * These elements can be retrieved and updated, and the Profile can check if an event id is in
  * its event history.
  */
-public class Profile {
+public class Profile implements Serializable {
     private String name;
     private String email;
     private String phone;
