@@ -1,5 +1,6 @@
 package com.example.lazuli_events;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.lazuli_events.model.Event;
@@ -10,12 +11,14 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Repository-style helper class for interacting with Firebase Firestore.
+ * Repository-style helper class for interacting with Firebase Firestore and Firebase Storage.
  *
  * <p>This class currently manages three main types of application data:</p>
  * <ul>
@@ -40,6 +43,12 @@ public class FirebaseDB {
 
     /** Reference to the Firestore collection that stores events. */
     private final CollectionReference dbRefEvents = db.collection("events");
+
+    /** Firebase Storage instance used for poster image uploads. */
+    private final FirebaseStorage storage =
+            FirebaseStorage.getInstance("gs://lazuli-events.firebasestorage.app");
+    /** Root Storage reference. */
+    private final StorageReference storageRef = storage.getReference();
 
     /** Local cached list of profiles currently loaded from Firestore. */
     private final ArrayList<Profile> profiles;
@@ -317,29 +326,35 @@ public class FirebaseDB {
      * @param recipientId the recipient user ID
      * @param callback callback used to return the list of notifications or an error
      */
-    public void getNotificationsForUser(String recipientId, NotificationsCallback callback) {
+    public void getNotificationsByRecipient(String recipientId, NotificationsCallback callback) {
         dbRefNotifications
                 .whereEqualTo("recipientId", recipientId)
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     ArrayList<UserNotification> notifications = new ArrayList<>();
-
                     for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        UserNotification notification = snapshot.toObject(UserNotification.class);
-                        notifications.add(notification);
+                        notifications.add(snapshot.toObject(UserNotification.class));
                     }
-
                     callback.onSuccess(notifications);
                 })
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
     /**
+     * Marks a notification as read in Firestore.
+     *
+     * @param notificationId the ID of the notification to mark as read
+     */
+    public void markNotificationAsRead(String notificationId) {
+        dbRefNotifications.document(notificationId).update("read", true);
+    }
+
+    /**
      * Saves an event to Firestore.
      *
      * <p>This stores all event fields, including registrationStartMillis,
-     * registrationEndMillis, and registrationPeriodText.</p>
+     * registrationEndMillis, registrationPeriodText, and posterUrl if already set.</p>
      *
      * @param event the event to save
      * @param callback callback used to report success or failure
@@ -350,11 +365,10 @@ public class FirebaseDB {
             return;
         }
 
-        String eventId = event.getId();
-        if (eventId == null || eventId.trim().isEmpty()) {
-            eventId = dbRefEvents.document().getId();
-            event.setId(eventId);
+        if (event.getId() == null || event.getId().trim().isEmpty()) {
+            event.setId(dbRefEvents.document().getId());
         }
+        String eventId = event.getId();
 
         long now = System.currentTimeMillis();
         if (event.getCreatedAt() == null) {
@@ -366,6 +380,65 @@ public class FirebaseDB {
                 .set(event)
                 .addOnSuccessListener(unused -> callback.onSuccess("Event saved."))
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    /**
+     * Uploads an event poster image to Firebase Storage, gets its download URL,
+     * stores that URL in the event's posterUrl field, and then saves the event to Firestore.
+     *
+     * @param event the event to save
+     * @param imageUri the local image Uri selected by the user
+     * @param callback callback used to report success or failure
+     */
+    public void addEventWithPoster(Event event, Uri imageUri, SimpleCallback callback) {
+        if (event == null) {
+            callback.onFailure("Event is null.");
+            return;
+        }
+
+        if (event.getId() == null || event.getId().trim().isEmpty()) {
+            event.setId(dbRefEvents.document().getId());
+        }
+        String eventId = event.getId();
+
+        long now = System.currentTimeMillis();
+        if (event.getCreatedAt() == null) {
+            event.setCreatedAt(now);
+        }
+        event.setUpdatedAt(now);
+
+        if (imageUri == null) {
+            dbRefEvents.document(eventId)
+                    .set(event)
+                    .addOnSuccessListener(unused -> callback.onSuccess("Event saved without poster."))
+                    .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+            return;
+        }
+
+        StorageReference posterRef = storageRef.child("event_posters/" + eventId + ".jpg");
+
+        posterRef.putFile(imageUri)
+                .continueWithTask(task -> {
+                    if (!task.isSuccessful()) {
+                        Exception exception = task.getException();
+                        if (exception != null) {
+                            throw exception;
+                        }
+                    }
+                    return posterRef.getDownloadUrl();
+                })
+                .addOnSuccessListener(downloadUri -> {
+                    event.setPosterUrl(downloadUri.toString());
+
+                    dbRefEvents.document(eventId)
+                            .set(event)
+                            .addOnSuccessListener(unused ->
+                                    callback.onSuccess("Event and poster saved successfully."))
+                            .addOnFailureListener(e ->
+                                    callback.onFailure("Poster uploaded, but event save failed: " + e.getMessage()));
+                })
+                .addOnFailureListener(e ->
+                        callback.onFailure("Poster upload failed: " + e.getMessage()));
     }
 
     /**
