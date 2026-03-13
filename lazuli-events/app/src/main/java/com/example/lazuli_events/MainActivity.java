@@ -1,6 +1,5 @@
 package com.example.lazuli_events;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,29 +11,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.lazuli_events.profile.Profile;
-import com.example.lazuli_events.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
+// this is the entry point of the application, using a single activity model.
+// NavGraphActivity == MainActivity
 
-/**
- * This is the entry point of the application, using a single activity model.
- * Note: NavGraphActivity is essentially equal to MainActivity.
- */
-
+// TODO: replace dummy session user with real logged-in profile
 public class MainActivity extends AppCompatActivity {
 
     public NavController navController;
     public FirebaseDB firebaseDB;
-    public Profile sessionProfile; //the current user's session
+    public Profile sessionProfile;
     private final String profileBundleKey = "sessionProfile";
     NavHostFragment navHostFragment;
 
@@ -52,21 +46,28 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseDB = new FirebaseDB();
 
-        // get the controller of the navhost. navhost is the UI view with navigation buttons
-        navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
+        navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_nav_host);
+
         if (navHostFragment == null) {
             return;
         }
+
         navController = navHostFragment.getNavController();
 
-        // get current user session and add profile into a bundle
         ArrayList<String> dummyProfileEventStrings = new ArrayList<>();
         dummyProfileEventStrings.add("event1");
         dummyProfileEventStrings.add("event2");
-        sessionProfile = new Profile("dummy", "dummy@gmail.com", "123-4567",
-                "deviceId", "all", dummyProfileEventStrings);
 
-        // set listeners for the bottom bar menu
+        sessionProfile = new Profile(
+                "dummy",
+                "dummy@gmail.com",
+                "123-4567",
+                "deviceId",
+                "all",
+                dummyProfileEventStrings
+        );
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (itemId == R.id.menu_item_home) {
                     Log.d("clicked", String.valueOf(itemId));
-                    setCurrentFragment(R.id.userEventsFragment);  // these are the ids from the nav graph xml
+                    setCurrentFragment(R.id.userEventsFragment);
                 } else if (itemId == R.id.menu_item_profile) {
                     Bundle profileBundle = new Bundle();
                     profileBundle.putSerializable(profileBundleKey, sessionProfile);
@@ -90,31 +91,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * This function switches out the current fragment to be displayed, invoked when navigating
-     * with a UI button.
-     * @param resourceId the id of the function to switch to.
-     */
     private void setCurrentFragment(int resourceId) {
         navController.navigate(resourceId);
     }
 
-    /**
-     * This function switches out the current fragment to be displayed along with a Bundle object.
-     * It's invoked when navigating with UI buttons.
-     * @param resourceId the ID of the fragment you're switching to
-     * @param bundle the Bundle object you want to push.
-     */
-    private void setCurrentFragmentWithBundle(int resourceId, Bundle bundle){
+    private void setCurrentFragmentWithBundle(int resourceId, Bundle bundle) {
         navController.navigate(resourceId, bundle);
     }
 
-    /**
-     * This function gets the navHostFragment's current fragment.
-     * @return the currently active fragment
-     */
     public Fragment getCurrentFragment() {
-        return navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
-
+        return navHostFragment == null
+                ? null
+                : navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
     }
 }
