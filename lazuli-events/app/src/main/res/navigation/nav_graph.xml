@@ -103,4 +103,10 @@
         android:label="fragment_compose_notification"
         tools:layout="@layout/fragment_compose_notification" />
 
+    <fragment
+        android:id="@+id/navigation_admin_manage"
+        android:name="com.example.lazuli_events.admin.AdminManageFragment"
+        android:label="Admin Dashboard"
+        tools:layout="@layout/fragment_admin_manage" />
+
 </navigation>
