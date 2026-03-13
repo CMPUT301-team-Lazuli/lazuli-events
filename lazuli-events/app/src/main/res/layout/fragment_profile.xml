@@ -84,6 +84,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
+                        android:id="@+id/profile_card_text_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Name"
@@ -91,6 +92,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/profile_card_text_location"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Location"
@@ -224,6 +226,7 @@
             android:paddingHorizontal="16dp">
 
             <TextView
+                android:id="@+id/user_preferences_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical|left"
