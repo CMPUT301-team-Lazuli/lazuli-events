@@ -3,8 +3,8 @@ package com.example.lazuli_events.notifications;
 import java.util.Date;
 
 /**
- * represents a notification created by an organizer to be sent to entrants
- * stores the notification type, the message body, and the time it was sent
+ * Represents a notification sent by an organizer to entrants.
+ * Contains the message details such as title, content, and the target audience.
  */
 public class Notification {
 
@@ -13,16 +13,16 @@ public class Notification {
     private Date timestamp;
 
     /**
-     * required empty public constructor for Firebase Firestore serialization
+     * Required empty public constructor for  Firestore.
      */
     public Notification() {
     }
 
     /**
-     * constructs a new Notification object
-     * @param type The category of the notification (e.g., "General Update")
-     * @param message the main text content written by the organizer
-     * @param timestamp the exact time the notification was sent
+     * Constructs a new Notification object.
+     * @param type The category of the notification such as "General Update".
+     * @param message The main text content written by the organizer.
+     * @param timestamp The exact time the notification was sent.
      */
     public Notification(String type, String message, Date timestamp) {
         this.type = type;
@@ -31,39 +31,50 @@ public class Notification {
     }
 
     // getters and setters
-
     /**
-     * gets the notification type
-     * @return the type as a String
+     * Gets the notification type.
+     * @return The type as a string.
      */
     public String getType() {
         return type;
     }
 
+    /**
+     * Sets the notification type.
+     * @param type The category of the notification to set.
+     */
     public void setType(String type) {
         this.type = type;
     }
 
     /**
-     * gets the notification message
-     * @return the message as a String
+     * Gets the notification message.
+     * @return the message as a string.
      */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Sets the notification message.
+     * @param message The main text content to set.
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
     /**
-     * gets the timestamp of when the notification was created
-     * @return the timestamp as a java.util.Date object
+     * Gets the timestamp of when the notification was created.
+     * @return the timestamp.
      */
     public Date getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Sets the timestamp of the notification.
+     * @param timestamp The exact time to set.
+     */
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
