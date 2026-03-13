@@ -206,10 +206,10 @@ public class TabViewAndEditFragment extends Fragment {
             return;
         }
 
-        Integer waitlistCap = null;
+        Long waitlistCap = null;
         if (!TextUtils.isEmpty(waitlistCapRaw)) {
             try {
-                int parsed = Integer.parseInt(waitlistCapRaw);
+                long parsed = Long.parseLong(waitlistCapRaw);
                 if (parsed <= 0) {
                     Toast.makeText(requireContext(),
                             "Spots open must be greater than 0 or left blank",

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +61,10 @@ public class EventRepository {
             }
         }
 
+        if (event.getWaitlist() == null) {
+            event.setWaitlist(new ArrayList<>());
+        }
+
         event.setUpdatedAt(System.currentTimeMillis());
         writeEventDocument(event, callback);
     }
@@ -81,6 +86,10 @@ public class EventRepository {
             if (event.getWaitlistCount() < 0) {
                 event.setWaitlistCount(0);
             }
+        }
+
+        if (event.getWaitlist() == null) {
+            event.setWaitlist(new ArrayList<>());
         }
 
         event.setUpdatedAt(System.currentTimeMillis());
@@ -139,18 +148,54 @@ public class EventRepository {
                 .document(eventId)
                 .get()
                 .addOnSuccessListener(snapshot -> {
-                    Event event = snapshot.toObject(Event.class);
-                    if (event == null) {
+                    if (!snapshot.exists()) {
                         callback.onError(new Exception("Event not found"));
                         return;
                     }
 
-                    // make sure model id is filled even if Firestore document id is not stored inside the document
-                    if (event.getId() == null || event.getId().trim().isEmpty()) {
-                        event.setId(snapshot.getId());
-                    }
+                    try {
+                        Event event = new Event();
 
-                    callback.onSuccess(event);
+                        String id = snapshot.getString("id");
+                        event.setId((id == null || id.trim().isEmpty()) ? snapshot.getId() : id);
+
+                        event.setOrganizerId(snapshot.getString("organizerId"));
+                        event.setName(snapshot.getString("name"));
+                        event.setDescription(snapshot.getString("description"));
+                        event.setLocation(snapshot.getString("location"));
+                        event.setContact(snapshot.getString("contact"));
+                        event.setPosterUrl(snapshot.getString("posterUrl"));
+
+                        event.setEventStartMillis(snapshot.getLong("eventStartMillis"));
+                        event.setRegistrationStartMillis(snapshot.getLong("registrationStartMillis"));
+                        event.setRegistrationEndMillis(snapshot.getLong("registrationEndMillis"));
+
+                        event.setWaitlistCap(snapshot.getLong("waitlistCap"));
+
+                        Long waitlistCountLong = snapshot.getLong("waitlistCount");
+                        event.setWaitlistCount(waitlistCountLong == null ? 0 : waitlistCountLong.intValue());
+
+                        event.setCreatedAt(snapshot.getLong("createdAt"));
+                        event.setUpdatedAt(snapshot.getLong("updatedAt"));
+
+                        ArrayList<String> fixedWaitlist = new ArrayList<>();
+                        Object rawWaitlist = snapshot.get("waitlist");
+
+                        if (rawWaitlist instanceof ArrayList<?>) {
+                            for (Object item : (ArrayList<?>) rawWaitlist) {
+                                if (item != null) {
+                                    fixedWaitlist.add(String.valueOf(item));
+                                }
+                            }
+                        }
+
+                        event.setWaitlist(fixedWaitlist);
+
+                        callback.onSuccess(event);
+
+                    } catch (Exception e) {
+                        callback.onError(new Exception("Failed to parse event: " + e.getMessage(), e));
+                    }
                 })
                 .addOnFailureListener(callback::onError);
     }
@@ -222,6 +267,7 @@ public class EventRepository {
 
                     transaction.set(waitlistRef, waitlistEntry);
                     transaction.update(eventRef, "waitlistCount", count + 1);
+                    transaction.update(eventRef, "waitlist", FieldValue.arrayUnion(String.valueOf(entrantId)));
 
                     return null;
                 }).addOnSuccessListener(unused -> callback.onSuccess())
@@ -250,6 +296,7 @@ public class EventRepository {
 
                     transaction.delete(waitlistRef);
                     transaction.update(eventRef, "waitlistCount", Math.max(0, count - 1));
+                    transaction.update(eventRef, "waitlist", FieldValue.arrayRemove(String.valueOf(entrantId)));
 
                     return null;
                 }).addOnSuccessListener(unused -> callback.onSuccess())
