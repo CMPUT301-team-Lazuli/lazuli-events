@@ -11,24 +11,24 @@ public class Event {
     private String contact;
     private String posterUrl;
 
+    private String eventType;
+    private String whoCanAttend;
+    private String qrPayload;
+
     private Long eventStartMillis;
     private Long registrationStartMillis;
     private Long registrationEndMillis;
 
-    // null = unlimited waitlist
+    // null = unlimited spots/waitlist
     private Long waitlistCap;
 
-    // cached count for fast reads
     private int waitlistCount;
-
-    // full list of entrant ids in the waitlist
     private ArrayList<String> waitlist;
 
     private Long createdAt;
     private Long updatedAt;
 
     public Event() {
-        // Required empty constructor for Firestore
         this.waitlist = new ArrayList<>();
     }
 
@@ -86,6 +86,30 @@ public class Event {
 
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public String getWhoCanAttend() {
+        return whoCanAttend;
+    }
+
+    public void setWhoCanAttend(String whoCanAttend) {
+        this.whoCanAttend = whoCanAttend;
+    }
+
+    public String getQrPayload() {
+        return qrPayload;
+    }
+
+    public void setQrPayload(String qrPayload) {
+        this.qrPayload = qrPayload;
     }
 
     public Long getEventStartMillis() {
