@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lazuli_events.MainActivity;
 import com.example.lazuli_events.R;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.w3c.dom.Text;
 
@@ -72,6 +74,27 @@ public class ProfileFragment extends Fragment {
                 mainActivity.navController.navigate(R.id.editProfileFragment, profileBundle);
             }
         });
+
+        // init delete profile button, which displays a dialogue asking for confirmation
+        TextView deleteProfileButton = rootView.findViewById(R.id.delete_profile_button);
+        deleteProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // test
+                Log.d("hi", "asdfasdfa");
+            }
+        });
+
+        // TODO: create confirmation dialog box
+
+//        MaterialAlertDialogBuilder deleteProfileDialog = new MaterialAlertDialogBuilder(rootView.getContext())
+//                .setTitle("title")
+//                .setMessage("are u sure")
+//                .setIcon(R.drawable.ic_profile)
+//                .setPositiveButton("asdfasdf") { _, _ ->
+//                    Toast.makeText(mainActivity, "adfasdf", Toast.LENGTH_SHORT).show()
+//        }
+
 
         // Display details in fragment (get id of each field in fragment_profile.xml)
 

@@ -249,13 +249,15 @@
 
 
         <TextView
+            android:id="@+id/delete_profile_button"
             android:layout_width="match_parent"
             android:layout_height="66dp"
             android:gravity="center_vertical"
             android:paddingHorizontal="16dp"
             android:text="Delete account"
             android:textColor="#F44848"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:clickable="true"/>
 
     </LinearLayout>
 

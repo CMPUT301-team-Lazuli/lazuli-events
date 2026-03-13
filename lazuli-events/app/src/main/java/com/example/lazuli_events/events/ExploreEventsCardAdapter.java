@@ -43,19 +43,6 @@ public class ExploreEventsCardAdapter extends ArrayAdapter<String> {
         }
 
 
-        // template reference from my emotilog project:
-
-//        Mood mood = getItem(position);
-//
-//        // set the text and image of the card to the Mood object's attributes
-//        TextView textView = itemView.findViewById(R.id.card_text_view);
-//        ImageView imageView = itemView.findViewById(R.id.card_image_view);
-//
-//        if (mood != null) {
-//            textView.setText(mood.getMood());
-//            imageView.setImageResource(mood.getImage());
-//        }
-
         return itemView;
 
     }
