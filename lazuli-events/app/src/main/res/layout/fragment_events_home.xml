@@ -4,104 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.EventsHomeFragment"
+    android:orientation="vertical"
     android:paddingHorizontal="16dp"
-    android:orientation="vertical">
+    tools:context=".home.EventsHomeFragment">
 
-<!--    HEADER -->
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <Space
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            tools:layout_editor_absoluteX="16dp" />
-        <TextView
-            android:id="@+id/textView"
+            android:layout_height="24dp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:gravity="center_vertical"
-            android:text="Your Events"
-            android:textSize="24dp"
-            tools:layout_editor_absoluteX="16dp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Your Events"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnCreateEvent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Create event"
+                android:padding="8dp"
+                android:src="@drawable/ic_calendar_button" />
+        </LinearLayout>
     </LinearLayout>
 
-<!--    CATEGORY TABS -->
+    <!-- CATEGORY TABS -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/events_home_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.tabs.TabItem
             android:id="@+id/entered_events_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Entered">
-        </com.google.android.material.tabs.TabItem>
+            android:text="Entered" />
+
         <com.google.android.material.tabs.TabItem
             android:id="@+id/hosted_events_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hosting"/>
+            android:text="Hosting" />
     </com.google.android.material.tabs.TabLayout>
 
     <FrameLayout
         android:id="@+id/event_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
-
-
-
-
-
-<!--    <Button-->
-<!--        android:id="@+id/button2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/button4"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/button3"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.925" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/button3"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/button2"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/button"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.925" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/button4"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/button2"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.925" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/button3"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.925" />-->
+        android:layout_height="match_parent" />
 
 </LinearLayout>
