@@ -69,18 +69,7 @@
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etEventStatusRegistrationStart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:inputType="none"
-                    android:textColor="#1F1F1F"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                app:boxCornerRadiusTopStart="12dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEventStatusRegistrationEnd"
@@ -94,18 +83,7 @@
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etEventStatusRegistrationEnd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:inputType="none"
-                    android:textColor="#1F1F1F"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                app:boxCornerRadiusTopStart="12dp"/>
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -183,7 +161,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDrawLottery"
                     android:layout_width="140dp"
-                    android:layout_height="40dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="12dp"
                     android:text="Draw Lottery"
                     android:textAllCaps="false"
