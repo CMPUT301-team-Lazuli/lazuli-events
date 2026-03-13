@@ -11,23 +11,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
+
         <Space
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            tools:layout_editor_absoluteX="16dp" />
+            android:layout_height="24dp" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tvEventManagerTitle"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:gravity="center_vertical"
                 android:text="Event Manager"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -35,48 +35,49 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageButton
                     android:id="@+id/compose_notification_button"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_compose_notification"
-                    android:background="#00000000" />
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Compose notification"
+                    android:src="@drawable/ic_compose_notification" />
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
-    <!--    CATEGORY TABS -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/event_manager_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.tabs.TabItem
             android:id="@+id/event_status_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Event Status">
-        </com.google.android.material.tabs.TabItem>
+            android:text="Event Status" />
+
         <com.google.android.material.tabs.TabItem
             android:id="@+id/event_entrants_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Entrants"/>
+            android:text="Entrants" />
+
         <com.google.android.material.tabs.TabItem
             android:id="@+id/event_view_and_edit_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="View and Edit"/>
+            android:text="View and Edit" />
     </com.google.android.material.tabs.TabLayout>
 
     <FrameLayout
         android:id="@+id/event_manager_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>

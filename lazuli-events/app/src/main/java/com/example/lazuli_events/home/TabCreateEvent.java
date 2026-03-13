@@ -40,7 +40,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class TabViewAndEditFragment extends Fragment {
+public class TabCreateEvent extends Fragment {
 
     private final EventRepository repository = new EventRepository();
 
@@ -101,13 +101,13 @@ public class TabViewAndEditFragment extends Fragment {
                 }
             });
 
-    public TabViewAndEditFragment() {
+    public TabCreateEvent() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_tab_event_manager, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_create_event, container, false);
 
         ivPosterPreview = rootView.findViewById(R.id.ivPosterPreview);
         tvPosterPlaceholder = rootView.findViewById(R.id.tvPosterPlaceholder);
