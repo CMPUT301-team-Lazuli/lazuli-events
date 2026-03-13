@@ -140,6 +140,7 @@ public class FirebaseDB {
 
     // ---------------- NOTIFICATIONS ----------------
 
+    // save one notification to the notifications collection
     public void addNotification(UserNotification notification, SimpleCallback callback) {
         dbRefNotifications.document(notification.getNotificationId())
                 .set(notification)
@@ -147,6 +148,7 @@ public class FirebaseDB {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    // load all notifications for one user, newest first
     public void getNotificationsForUser(String recipientId, NotificationsCallback callback) {
         dbRefNotifications
                 .whereEqualTo("recipientId", recipientId)
@@ -155,6 +157,7 @@ public class FirebaseDB {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     ArrayList<UserNotification> notifications = new ArrayList<>();
 
+                    // convert each Firestore document into a UserNotification object
                     for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
                         UserNotification notification = snapshot.toObject(UserNotification.class);
                         notifications.add(notification);
@@ -165,6 +168,7 @@ public class FirebaseDB {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    // create and save a "winner" lottery notification
     public void sendLotteryWinNotification(String recipientId, String eventId, String eventTitle,
                                            SimpleCallback callback) {
         String notificationId = UUID.randomUUID().toString();
@@ -182,6 +186,7 @@ public class FirebaseDB {
         addNotification(notification, callback);
     }
 
+    // create and save a "loser" lottery notification
     public void sendLotteryLoseNotification(String recipientId, String eventId, String eventTitle,
                                             SimpleCallback callback) {
         String notificationId = UUID.randomUUID().toString();
@@ -200,7 +205,7 @@ public class FirebaseDB {
     }
 
     /**
-     * winners get "lottery_win", everyone else gets "lottery_lose".
+     * send winner notifications to winners and loser notifications to losers
      */
     public void sendLotteryResults(String eventId,
                                    String eventTitle,
@@ -208,13 +213,16 @@ public class FirebaseDB {
                                    ArrayList<String> loserIds,
                                    SimpleCallback callback) {
 
+        // total number of notifications that need to be sent
         int totalToSend = winnerIds.size() + loserIds.size();
 
+        // stop if there are no results to send
         if (totalToSend == 0) {
             callback.onFailure("No lottery results to send.");
             return;
         }
 
+        // track completed sends and whether any failure happened
         final int[] completed = {0};
         final boolean[] failed = {false};
 
@@ -222,6 +230,8 @@ public class FirebaseDB {
             @Override
             public void onSuccess(String message) {
                 completed[0]++;
+
+                // when all notifications are sent successfully, return success once
                 if (completed[0] == totalToSend && !failed[0]) {
                     callback.onSuccess("Lottery notifications sent.");
                 }
@@ -229,6 +239,7 @@ public class FirebaseDB {
 
             @Override
             public void onFailure(String error) {
+                // stop on the first failure
                 if (!failed[0]) {
                     failed[0] = true;
                     callback.onFailure(error);
@@ -236,12 +247,13 @@ public class FirebaseDB {
             }
         };
 
+        // send notifications to winners
         for (String winnerId : winnerIds) {
             sendLotteryWinNotification(winnerId, eventId, eventTitle, innerCallback);
         }
 
+        // send notifications to losers
         for (String loserId : loserIds) {
             sendLotteryLoseNotification(loserId, eventId, eventTitle, innerCallback);
         }
-    }
-}
+    }}
