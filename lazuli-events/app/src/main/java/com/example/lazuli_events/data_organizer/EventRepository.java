@@ -43,9 +43,6 @@ public class EventRepository {
     private final StorageReference posterRoot =
             FirebaseStorage.getInstance().getReference("event_posters");
 
-    /**
-     * Save event only (no poster upload).
-     */
     public void saveEvent(@NonNull Event event,
                           @NonNull SimpleCallback callback) {
 
@@ -65,20 +62,14 @@ public class EventRepository {
             event.setWaitlist(new ArrayList<>());
         }
 
+        if (event.getQrPayload() == null || event.getQrPayload().trim().isEmpty()) {
+            event.setQrPayload(buildQrPayload(event.getId()));
+        }
+
         event.setUpdatedAt(System.currentTimeMillis());
         writeEventDocument(event, callback);
     }
 
-    /**
-     * Save event and optionally upload poster.
-     *
-     * FIX:
-     * 1. Save the event document first
-     * 2. Upload poster second
-     * 3. Update posterUrl in Firestore last
-     *
-     * This prevents "event does not exist" when poster upload fails.
-     */
     public void saveEvent(@NonNull Event event,
                           @Nullable Uri posterUri,
                           @NonNull SimpleCallback callback) {
@@ -99,23 +90,23 @@ public class EventRepository {
             event.setWaitlist(new ArrayList<>());
         }
 
+        if (event.getQrPayload() == null || event.getQrPayload().trim().isEmpty()) {
+            event.setQrPayload(buildQrPayload(event.getId()));
+        }
+
         event.setUpdatedAt(System.currentTimeMillis());
 
-        // Step 1: always save event first
         writeEventDocument(event, new SimpleCallback() {
             @Override
             public void onSuccess() {
-                // No poster selected, done
                 if (posterUri == null) {
                     callback.onSuccess();
                     return;
                 }
 
-                // Step 2: upload poster
                 uploadPoster(event.getId(), posterUri, new PosterUploadCallback() {
                     @Override
                     public void onSuccess(String downloadUrl) {
-                        // Step 3: update event with posterUrl
                         event.setPosterUrl(downloadUrl);
                         event.setUpdatedAt(System.currentTimeMillis());
 
@@ -148,9 +139,6 @@ public class EventRepository {
         });
     }
 
-    /**
-     * Upload poster image to Firebase Storage and return download URL.
-     */
     public void uploadPoster(@NonNull String eventId,
                              @NonNull Uri posterUri,
                              @NonNull PosterUploadCallback callback) {
@@ -177,6 +165,10 @@ public class EventRepository {
                 .addOnFailureListener(callback::onError);
     }
 
+    private String buildQrPayload(@NonNull String eventId) {
+        return "lazuli://event/" + eventId;
+    }
+
     public void getEventById(@NonNull String eventId,
                              @NonNull EventCallback callback) {
         db.collection("events")
@@ -200,6 +192,15 @@ public class EventRepository {
                         event.setLocation(snapshot.getString("location"));
                         event.setContact(snapshot.getString("contact"));
                         event.setPosterUrl(snapshot.getString("posterUrl"));
+
+                        event.setEventType(snapshot.getString("eventType"));
+                        event.setWhoCanAttend(snapshot.getString("whoCanAttend"));
+
+                        String qrPayload = snapshot.getString("qrPayload");
+                        if (qrPayload == null || qrPayload.trim().isEmpty()) {
+                            qrPayload = buildQrPayload(event.getId());
+                        }
+                        event.setQrPayload(qrPayload);
 
                         event.setEventStartMillis(snapshot.getLong("eventStartMillis"));
                         event.setRegistrationStartMillis(snapshot.getLong("registrationStartMillis"));
@@ -235,9 +236,6 @@ public class EventRepository {
                 .addOnFailureListener(callback::onError);
     }
 
-    /**
-     * Check whether one entrant is already in an event waitlist.
-     */
     public void isUserInWaitlist(@NonNull String eventId,
                                  @NonNull String entrantId,
                                  @NonNull WaitlistStatusCallback callback) {
@@ -251,11 +249,6 @@ public class EventRepository {
                 .addOnFailureListener(callback::onError);
     }
 
-    /**
-     * Enforces BOTH:
-     * 1) registration window
-     * 2) optional waitlist cap
-     */
     public void joinWaitlist(@NonNull String eventId,
                              @NonNull String entrantId,
                              @NonNull SimpleCallback callback) {
@@ -309,9 +302,6 @@ public class EventRepository {
                 .addOnFailureListener(callback::onError);
     }
 
-    /**
-     * Remove entrant from waitlist and decrease waitlist count.
-     */
     public void leaveWaitlist(@NonNull String eventId,
                               @NonNull String entrantId,
                               @NonNull SimpleCallback callback) {

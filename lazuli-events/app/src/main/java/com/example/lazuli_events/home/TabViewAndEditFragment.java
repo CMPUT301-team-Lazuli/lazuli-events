@@ -35,6 +35,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -239,10 +240,23 @@ public class TabViewAndEditFragment extends Fragment {
         String location = getText(etLocation);
         String description = getText(etDescription);
         String contact = getText(etContact);
+
+        String eventType = getDropdownText(actEventType);
+        String whoCanAttend = getDropdownText(actWhoCanAttend);
         String waitlistCapRaw = getDropdownText(actWaitlistCap);
 
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(requireContext(), "Event name is required", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(eventType)) {
+            Toast.makeText(requireContext(), "Please choose an event type", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(whoCanAttend)) {
+            Toast.makeText(requireContext(), "Please choose who can attend", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -260,10 +274,10 @@ public class TabViewAndEditFragment extends Fragment {
             return;
         }
 
-        Integer waitlistCap = null;
+        Long waitlistCap = null;
         if (!TextUtils.isEmpty(waitlistCapRaw)) {
             try {
-                int parsed = Integer.parseInt(waitlistCapRaw);
+                long parsed = Long.parseLong(waitlistCapRaw);
                 if (parsed <= 0) {
                     Toast.makeText(requireContext(),
                             "Spots open must be greater than 0",
@@ -290,8 +304,11 @@ public class TabViewAndEditFragment extends Fragment {
         event.setLocation(location);
         event.setDescription(description);
         event.setContact(contact);
-        event.setWaitlistCap(Long.valueOf(waitlistCap));
+        event.setEventType(eventType);
+        event.setWhoCanAttend(whoCanAttend);
+        event.setWaitlistCap(waitlistCap);
         event.setWaitlistCount(0);
+        event.setWaitlist(new ArrayList<>());
         event.setRegistrationStartMillis(registrationStartMillis);
         event.setRegistrationEndMillis(registrationEndMillis);
 
