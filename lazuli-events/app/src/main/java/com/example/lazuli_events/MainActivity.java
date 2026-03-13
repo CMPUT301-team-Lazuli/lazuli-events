@@ -25,16 +25,17 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.util.ArrayList;
 
 
-// this is the entry point of the application, using a single activity model.
-// NavGraphActivity == MainActivity
+/**
+ * This is the entry point of the application, using a single activity model.
+ * Note: NavGraphActivity is essentially equal to MainActivity.
+ */
 
-// TODO: set the session user (maybe as a singleton ... idek ...)
 public class MainActivity extends AppCompatActivity {
 
     public NavController navController;
     public FirebaseDB firebaseDB;
-    public Profile sessionProfile;
-    private String profileBundleKey = "sessionProfile";
+    public Profile sessionProfile; //the current user's session
+    private final String profileBundleKey = "sessionProfile";
     NavHostFragment navHostFragment;
 //    BottomNavigationView bottomNavigationView;
 
@@ -105,7 +106,10 @@ public class MainActivity extends AppCompatActivity {
         navController.navigate(resourceId, bundle);
     }
 
-    // getter
+    /**
+     * This function gets the navHostFragment's current fragment.
+     * @return the currently active fragment
+     */
     public Fragment getCurrentFragment() {
         return navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
 

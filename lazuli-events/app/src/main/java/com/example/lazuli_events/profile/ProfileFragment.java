@@ -21,7 +21,7 @@ import org.w3c.dom.Text;
 
 
 /**
- * This is a profile Fragment that displays a user's personal information.
+ * This is a Fragment that displays a user's personal information.
  * Editing user info will update this fragment with the proper details.
  */
 public class ProfileFragment extends Fragment {
@@ -30,20 +30,8 @@ public class ProfileFragment extends Fragment {
     Profile profile;
     private static final String key = "sessionProfile";
 
-
     public ProfileFragment() {
     }
-
-    /*
-    public static ProfileFragment newInstance(Profile newProfile){
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(key, newProfile);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

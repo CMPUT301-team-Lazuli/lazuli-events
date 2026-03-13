@@ -16,12 +16,16 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+/**
+ * This is a Fragment that lets a user update their details.
+ * "Saving changes" will update their details, which displays them in ProfileFragment.
+ */
+
 public class EditProfileFragment extends Fragment {
 
     private static final String key = "sessionProfile";
 
     public EditProfileFragment() {
-
     }
 
     @Nullable
@@ -34,7 +38,6 @@ public class EditProfileFragment extends Fragment {
         if (getArguments() == null){
             throw new NullPointerException("Issues reading profile. getArguments is null!");
         }
-
         Bundle profileBundle = getArguments();
         Profile profile = (Profile) profileBundle.getSerializable(key);
         if (profile == null){
