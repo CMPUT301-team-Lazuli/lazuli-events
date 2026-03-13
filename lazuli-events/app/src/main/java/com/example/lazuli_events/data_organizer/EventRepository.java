@@ -38,7 +38,7 @@ public class EventRepository {
             FirebaseStorage.getInstance().getReference("event_posters");
 
     /**
-     * Save event only (no new poster upload).
+     * Save event only (no poster upload).
      */
     public void saveEvent(@NonNull Event event,
                           @NonNull SimpleCallback callback) {
@@ -60,7 +60,14 @@ public class EventRepository {
     }
 
     /**
-     * Save event and optionally upload a new poster first.
+     * Save event and optionally upload poster.
+     *
+     * FIX:
+     * 1. Save the event document first
+     * 2. Upload poster second
+     * 3. Update posterUrl in Firestore last
+     *
+     * This prevents "event does not exist" when poster upload fails.
      */
     public void saveEvent(@NonNull Event event,
                           @Nullable Uri posterUri,
@@ -80,16 +87,44 @@ public class EventRepository {
 
         event.setUpdatedAt(System.currentTimeMillis());
 
-        if (posterUri == null) {
-            writeEventDocument(event, callback);
-            return;
-        }
-
-        uploadPoster(event.getId(), posterUri, new PosterUploadCallback() {
+        // Step 1: always save event first
+        writeEventDocument(event, new SimpleCallback() {
             @Override
-            public void onSuccess(String downloadUrl) {
-                event.setPosterUrl(downloadUrl);
-                writeEventDocument(event, callback);
+            public void onSuccess() {
+                // No poster selected, done
+                if (posterUri == null) {
+                    callback.onSuccess();
+                    return;
+                }
+
+                // Step 2: upload poster
+                uploadPoster(event.getId(), posterUri, new PosterUploadCallback() {
+                    @Override
+                    public void onSuccess(String downloadUrl) {
+                        // Step 3: update event with posterUrl
+                        event.setPosterUrl(downloadUrl);
+                        event.setUpdatedAt(System.currentTimeMillis());
+
+                        writeEventDocument(event, new SimpleCallback() {
+                            @Override
+                            public void onSuccess() {
+                                callback.onSuccess();
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                callback.onError(e);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        callback.onError(new Exception(
+                                "Event was saved, but poster upload failed: " + e.getMessage()
+                        ));
+                    }
+                });
             }
 
             @Override
