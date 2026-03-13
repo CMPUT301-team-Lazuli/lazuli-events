@@ -5,9 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.lazuli_events"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.lazuli_events"
@@ -44,16 +42,18 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.play.services.maps)
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    
     implementation(platform("com.google.firebase:firebase-bom:34.9.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation ("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     // ZXing for QR Code generation
     implementation("com.google.zxing:core:3.5.4")
-    implementation("com.google.android.material:material:1.13.0")
 }

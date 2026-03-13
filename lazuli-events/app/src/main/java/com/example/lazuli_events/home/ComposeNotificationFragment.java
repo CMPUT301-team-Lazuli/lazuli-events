@@ -16,8 +16,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 /**
- * fragment responsible for allowing organizers to compose and send
- * notifications to specific groups of entrants (Registered, Waitlisted, Cancelled)
+ * Fragment responsible for allowing organizers to compose and send.
+ * Notifications to specific groups of entrants (Registered, Waitlisted, Cancelled).
  */
 public class ComposeNotificationFragment extends Fragment {
 
@@ -28,10 +28,20 @@ public class ComposeNotificationFragment extends Fragment {
     private TextInputLayout messageInputLayout;
     private MaterialButton sendButton;
 
+    /**
+     * Required empty public constructor for fragment installment.
+     */
     public ComposeNotificationFragment() {
-        // required empty public constructor
     }
 
+    /**
+     * Called to have the fragment for its user interface view.
+     * Inflates the layout and initializes the UI components.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state.
+     * @return The View for the fragment's UI.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // inflate the layout for this fragment
@@ -54,8 +64,9 @@ public class ComposeNotificationFragment extends Fragment {
         // set up the Send button click listener
         sendButton.setOnClickListener(new View.OnClickListener() {
             /**
-             * handles the click event for the send button
-             * validates the input and processes the notification dispatch
+             * Handles the click event for the send button.
+             * Validates the input and processes the notification dispatch.
+             * @param v The view that was clicked (the send button).
              */
             @Override
             public void onClick(View v) {
@@ -67,8 +78,8 @@ public class ComposeNotificationFragment extends Fragment {
     }
 
     /**
-     * validates the form data and triggers the notification sending process
-     * checks if the message is empty and if at least one recipient group is selected
+     * Validates the form data and triggers the notification sending process.
+     * Checks if the message is empty and if at least one recipient group is selected.
      */
     private void sendMessage() {
         String message = "";
@@ -95,7 +106,7 @@ public class ComposeNotificationFragment extends Fragment {
 
         String notifType = notificationTypeSpinner.getSelectedItem().toString();
 
-        // this Toast verifies the UI logic successfully captured everything.
+        // this Toast verifies the UI logic successfully captured everything
         Toast.makeText(getContext(), "Ready to send " + notifType + " to Firebase!", Toast.LENGTH_SHORT).show();
     }
 }

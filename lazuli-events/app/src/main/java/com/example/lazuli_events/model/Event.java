@@ -2,32 +2,75 @@ package com.example.lazuli_events.model;
 
 import java.util.ArrayList;
 
+/**
+ * Model class representing an event in the Lazuli Events application.
+ */
 public class Event {
+
+    /** Unique ID of the event document. */
     private String id;
+
+    /** User ID of the organizer who created the event. */
     private String organizerId;
+
+    /** Display name of the event. */
     private String name;
+
+    /** Description or summary of the event. */
     private String description;
+
+    /** Physical or virtual location of the event. */
     private String location;
+
+    /** Contact information for the organizer or event. */
     private String contact;
+
+    /** Download URL of the event poster image. */
     private String posterUrl;
 
+    /** Type or category of the event. */
     private String eventType;
+
+    /** Audience restriction or attendance category for the event. */
     private String whoCanAttend;
+
+    /** QR payload string associated with this event. */
     private String qrPayload;
 
+    /** Event start time in milliseconds since epoch. */
     private Long eventStartMillis;
+
+    /** Registration opening time in milliseconds since epoch. */
     private Long registrationStartMillis;
+
+    /** Registration closing time in milliseconds since epoch. */
     private Long registrationEndMillis;
 
-    // null = unlimited spots/waitlist
+    /** Readable registration period text for easier display in Firestore/UI. */
+    private String registrationPeriodText;
+
+    /**
+     * Maximum number of spots on the waitlist.
+     *
+     * <p>A {@code null} value means the waitlist is unlimited.</p>
+     */
     private Long waitlistCap;
 
+    /** Current number of users in the waitlist. */
     private int waitlistCount;
+
+    /** List of entrant IDs currently on the waitlist. */
     private ArrayList<String> waitlist;
 
+    /** Timestamp of when the event was created, in milliseconds since epoch. */
     private Long createdAt;
+
+    /** Timestamp of the most recent event update, in milliseconds since epoch. */
     private Long updatedAt;
 
+    /**
+     * Creates a new empty event with an initialized waitlist.
+     */
     public Event() {
         this.waitlist = new ArrayList<>();
     }
@@ -134,6 +177,14 @@ public class Event {
 
     public void setRegistrationEndMillis(Long registrationEndMillis) {
         this.registrationEndMillis = registrationEndMillis;
+    }
+
+    public String getRegistrationPeriodText() {
+        return registrationPeriodText;
+    }
+
+    public void setRegistrationPeriodText(String registrationPeriodText) {
+        this.registrationPeriodText = registrationPeriodText;
     }
 
     public Long getWaitlistCap() {

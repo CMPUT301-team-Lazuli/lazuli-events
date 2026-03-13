@@ -14,12 +14,28 @@ import com.example.lazuli_events.R;
 import java.util.ArrayList;
 import javax.annotation.Nullable;
 
+/**
+ * Custom ArrayAdapter used to display a list of entrant objects.
+ * Handles the mapping of entrant data to the UI layout.
+ */
 public class EntrantListAdapter extends ArrayAdapter<Entrant> {
 
+    /**
+     * Constructs a new EntrantListAdapter.
+     * @param context The current context. Used to filled the layout file.
+     * @param entrantList The list of Entrant objects to represent in the ListView.
+     */
     public EntrantListAdapter(Context context, ArrayList<Entrant> entrantList) {
         super(context, 0, entrantList);
     }
 
+    /**
+     * Gets a view that displays the data at the specified position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     * @param convertView The old view to reuse, if possible.
+     * @param parent The parent that this view will eventually be attached to.
+     * @return A View corresponding to the data at the specified position.
+     */
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View itemView = convertView;
         if (itemView == null) {
