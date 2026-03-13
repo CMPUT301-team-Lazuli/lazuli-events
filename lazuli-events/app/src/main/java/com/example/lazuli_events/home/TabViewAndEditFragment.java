@@ -9,6 +9,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -51,15 +53,39 @@ public class TabViewAndEditFragment extends Fragment {
     private TextInputEditText etRegistrationStart;
     private TextInputEditText etRegistrationEnd;
     private TextInputEditText etLocation;
-    private TextInputEditText etWaitlistCap;
     private TextInputEditText etDescription;
     private TextInputEditText etContact;
 
     private MaterialAutoCompleteTextView actEventType;
     private MaterialAutoCompleteTextView actWhoCanAttend;
+    private MaterialAutoCompleteTextView actWaitlistCap;
 
     private Long registrationStartMillis;
     private Long registrationEndMillis;
+
+    private final String[] eventTypeOptions = {
+            "Arts & Entertainment",
+            "Sports & Fitness",
+            "Food & Drink",
+            "Technology & Gaming",
+            "Workshop & Education"
+    };
+
+    private final String[] audienceOptions = {
+            "All ages",
+            "18+",
+            "16+",
+            "12+",
+            "Kids"
+    };
+
+    private final String[] waitlistCapOptions = {
+            "10",
+            "25",
+            "50",
+            "100",
+            "250"
+    };
 
     private final ActivityResultLauncher<String> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
@@ -76,7 +102,6 @@ public class TabViewAndEditFragment extends Fragment {
             });
 
     public TabViewAndEditFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -97,12 +122,14 @@ public class TabViewAndEditFragment extends Fragment {
         etRegistrationStart = rootView.findViewById(R.id.etRegistrationStart);
         etRegistrationEnd = rootView.findViewById(R.id.etRegistrationEnd);
         etLocation = rootView.findViewById(R.id.etLocation);
-        etWaitlistCap = rootView.findViewById(R.id.etWaitlistCap);
         etDescription = rootView.findViewById(R.id.etDescription);
         etContact = rootView.findViewById(R.id.etContact);
 
         actEventType = rootView.findViewById(R.id.actEventType);
         actWhoCanAttend = rootView.findViewById(R.id.actWhoCanAttend);
+        actWaitlistCap = rootView.findViewById(R.id.actWaitlistCap);
+
+        setupDropdowns();
 
         btnAddCover.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
@@ -120,6 +147,34 @@ public class TabViewAndEditFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    private void setupDropdowns() {
+        ArrayAdapter<String> eventTypeAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                eventTypeOptions
+        );
+
+        ArrayAdapter<String> audienceAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                audienceOptions
+        );
+
+        ArrayAdapter<String> waitlistCapAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                waitlistCapOptions
+        );
+
+        actEventType.setAdapter(eventTypeAdapter);
+        actWhoCanAttend.setAdapter(audienceAdapter);
+        actWaitlistCap.setAdapter(waitlistCapAdapter);
+
+        actEventType.setOnClickListener(v -> actEventType.showDropDown());
+        actWhoCanAttend.setOnClickListener(v -> actWhoCanAttend.showDropDown());
+        actWaitlistCap.setOnClickListener(v -> actWaitlistCap.showDropDown());
     }
 
     private void openDateThenTimePicker(boolean isStart) {
@@ -185,10 +240,23 @@ public class TabViewAndEditFragment extends Fragment {
         String location = getText(etLocation);
         String description = getText(etDescription);
         String contact = getText(etContact);
-        String waitlistCapRaw = getText(etWaitlistCap);
+
+        String eventType = getDropdownText(actEventType);
+        String whoCanAttend = getDropdownText(actWhoCanAttend);
+        String waitlistCapRaw = getDropdownText(actWaitlistCap);
 
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(requireContext(), "Event name is required", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(eventType)) {
+            Toast.makeText(requireContext(), "Please choose an event type", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(whoCanAttend)) {
+            Toast.makeText(requireContext(), "Please choose who can attend", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -206,13 +274,13 @@ public class TabViewAndEditFragment extends Fragment {
             return;
         }
 
-        Integer waitlistCap = null;
+        Long waitlistCap = null;
         if (!TextUtils.isEmpty(waitlistCapRaw)) {
             try {
-                int parsed = Integer.parseInt(waitlistCapRaw);
+                long parsed = Long.parseLong(waitlistCapRaw);
                 if (parsed <= 0) {
                     Toast.makeText(requireContext(),
-                            "Spots open must be greater than 0 or left blank",
+                            "Spots open must be greater than 0",
                             Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -236,8 +304,11 @@ public class TabViewAndEditFragment extends Fragment {
         event.setLocation(location);
         event.setDescription(description);
         event.setContact(contact);
+        event.setEventType(eventType);
+        event.setWhoCanAttend(whoCanAttend);
         event.setWaitlistCap(waitlistCap);
         event.setWaitlistCount(0);
+        event.setWaitlist(new ArrayList<>());
         event.setRegistrationStartMillis(registrationStartMillis);
         event.setRegistrationEndMillis(registrationEndMillis);
 
@@ -324,5 +395,9 @@ public class TabViewAndEditFragment extends Fragment {
 
     private String getText(TextInputEditText editText) {
         return editText.getText() == null ? "" : editText.getText().toString().trim();
+    }
+
+    private String getDropdownText(MaterialAutoCompleteTextView dropdown) {
+        return dropdown.getText() == null ? "" : dropdown.getText().toString().trim();
     }
 }

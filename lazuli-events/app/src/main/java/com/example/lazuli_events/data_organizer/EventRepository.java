@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,13 +34,15 @@ public class EventRepository {
         void onError(Exception e);
     }
 
+    public interface WaitlistStatusCallback {
+        void onResult(boolean isInWaitlist);
+        void onError(Exception e);
+    }
+
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final StorageReference posterRoot =
             FirebaseStorage.getInstance().getReference("event_posters");
 
-    /**
-     * Save event only (no new poster upload).
-     */
     public void saveEvent(@NonNull Event event,
                           @NonNull SimpleCallback callback) {
 
@@ -55,13 +58,18 @@ public class EventRepository {
             }
         }
 
+        if (event.getWaitlist() == null) {
+            event.setWaitlist(new ArrayList<>());
+        }
+
+        if (event.getQrPayload() == null || event.getQrPayload().trim().isEmpty()) {
+            event.setQrPayload(buildQrPayload(event.getId()));
+        }
+
         event.setUpdatedAt(System.currentTimeMillis());
         writeEventDocument(event, callback);
     }
 
-    /**
-     * Save event and optionally upload a new poster first.
-     */
     public void saveEvent(@NonNull Event event,
                           @Nullable Uri posterUri,
                           @NonNull SimpleCallback callback) {
@@ -78,18 +86,50 @@ public class EventRepository {
             }
         }
 
-        event.setUpdatedAt(System.currentTimeMillis());
-
-        if (posterUri == null) {
-            writeEventDocument(event, callback);
-            return;
+        if (event.getWaitlist() == null) {
+            event.setWaitlist(new ArrayList<>());
         }
 
-        uploadPoster(event.getId(), posterUri, new PosterUploadCallback() {
+        if (event.getQrPayload() == null || event.getQrPayload().trim().isEmpty()) {
+            event.setQrPayload(buildQrPayload(event.getId()));
+        }
+
+        event.setUpdatedAt(System.currentTimeMillis());
+
+        writeEventDocument(event, new SimpleCallback() {
             @Override
-            public void onSuccess(String downloadUrl) {
-                event.setPosterUrl(downloadUrl);
-                writeEventDocument(event, callback);
+            public void onSuccess() {
+                if (posterUri == null) {
+                    callback.onSuccess();
+                    return;
+                }
+
+                uploadPoster(event.getId(), posterUri, new PosterUploadCallback() {
+                    @Override
+                    public void onSuccess(String downloadUrl) {
+                        event.setPosterUrl(downloadUrl);
+                        event.setUpdatedAt(System.currentTimeMillis());
+
+                        writeEventDocument(event, new SimpleCallback() {
+                            @Override
+                            public void onSuccess() {
+                                callback.onSuccess();
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                callback.onError(e);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        callback.onError(new Exception(
+                                "Event was saved, but poster upload failed: " + e.getMessage()
+                        ));
+                    }
+                });
             }
 
             @Override
@@ -99,9 +139,6 @@ public class EventRepository {
         });
     }
 
-    /**
-     * Upload poster image to Firebase Storage and return download URL.
-     */
     public void uploadPoster(@NonNull String eventId,
                              @NonNull Uri posterUri,
                              @NonNull PosterUploadCallback callback) {
@@ -128,27 +165,90 @@ public class EventRepository {
                 .addOnFailureListener(callback::onError);
     }
 
+    private String buildQrPayload(@NonNull String eventId) {
+        return "lazuli://event/" + eventId;
+    }
+
     public void getEventById(@NonNull String eventId,
                              @NonNull EventCallback callback) {
         db.collection("events")
                 .document(eventId)
                 .get()
                 .addOnSuccessListener(snapshot -> {
-                    Event event = snapshot.toObject(Event.class);
-                    if (event == null) {
+                    if (!snapshot.exists()) {
                         callback.onError(new Exception("Event not found"));
                         return;
                     }
-                    callback.onSuccess(event);
+
+                    try {
+                        Event event = new Event();
+
+                        String id = snapshot.getString("id");
+                        event.setId((id == null || id.trim().isEmpty()) ? snapshot.getId() : id);
+
+                        event.setOrganizerId(snapshot.getString("organizerId"));
+                        event.setName(snapshot.getString("name"));
+                        event.setDescription(snapshot.getString("description"));
+                        event.setLocation(snapshot.getString("location"));
+                        event.setContact(snapshot.getString("contact"));
+                        event.setPosterUrl(snapshot.getString("posterUrl"));
+
+                        event.setEventType(snapshot.getString("eventType"));
+                        event.setWhoCanAttend(snapshot.getString("whoCanAttend"));
+
+                        String qrPayload = snapshot.getString("qrPayload");
+                        if (qrPayload == null || qrPayload.trim().isEmpty()) {
+                            qrPayload = buildQrPayload(event.getId());
+                        }
+                        event.setQrPayload(qrPayload);
+
+                        event.setEventStartMillis(snapshot.getLong("eventStartMillis"));
+                        event.setRegistrationStartMillis(snapshot.getLong("registrationStartMillis"));
+                        event.setRegistrationEndMillis(snapshot.getLong("registrationEndMillis"));
+
+                        event.setWaitlistCap(snapshot.getLong("waitlistCap"));
+
+                        Long waitlistCountLong = snapshot.getLong("waitlistCount");
+                        event.setWaitlistCount(waitlistCountLong == null ? 0 : waitlistCountLong.intValue());
+
+                        event.setCreatedAt(snapshot.getLong("createdAt"));
+                        event.setUpdatedAt(snapshot.getLong("updatedAt"));
+
+                        ArrayList<String> fixedWaitlist = new ArrayList<>();
+                        Object rawWaitlist = snapshot.get("waitlist");
+
+                        if (rawWaitlist instanceof ArrayList<?>) {
+                            for (Object item : (ArrayList<?>) rawWaitlist) {
+                                if (item != null) {
+                                    fixedWaitlist.add(String.valueOf(item));
+                                }
+                            }
+                        }
+
+                        event.setWaitlist(fixedWaitlist);
+
+                        callback.onSuccess(event);
+
+                    } catch (Exception e) {
+                        callback.onError(new Exception("Failed to parse event: " + e.getMessage(), e));
+                    }
                 })
                 .addOnFailureListener(callback::onError);
     }
 
-    /**
-     * Enforces BOTH:
-     * 1) registration window
-     * 2) optional waitlist cap
-     */
+    public void isUserInWaitlist(@NonNull String eventId,
+                                 @NonNull String entrantId,
+                                 @NonNull WaitlistStatusCallback callback) {
+
+        db.collection("events")
+                .document(eventId)
+                .collection("waitlist")
+                .document(entrantId)
+                .get()
+                .addOnSuccessListener(snapshot -> callback.onResult(snapshot.exists()))
+                .addOnFailureListener(callback::onError);
+    }
+
     public void joinWaitlist(@NonNull String eventId,
                              @NonNull String entrantId,
                              @NonNull SimpleCallback callback) {
@@ -195,6 +295,7 @@ public class EventRepository {
 
                     transaction.set(waitlistRef, waitlistEntry);
                     transaction.update(eventRef, "waitlistCount", count + 1);
+                    transaction.update(eventRef, "waitlist", FieldValue.arrayUnion(String.valueOf(entrantId)));
 
                     return null;
                 }).addOnSuccessListener(unused -> callback.onSuccess())
@@ -211,7 +312,7 @@ public class EventRepository {
         db.runTransaction(transaction -> {
                     DocumentSnapshot waitlistSnap = transaction.get(waitlistRef);
                     if (!waitlistSnap.exists()) {
-                        return null;
+                        throw new IllegalStateException("You are not in this waitlist.");
                     }
 
                     DocumentSnapshot eventSnap = transaction.get(eventRef);
@@ -220,6 +321,7 @@ public class EventRepository {
 
                     transaction.delete(waitlistRef);
                     transaction.update(eventRef, "waitlistCount", Math.max(0, count - 1));
+                    transaction.update(eventRef, "waitlist", FieldValue.arrayRemove(String.valueOf(entrantId)));
 
                     return null;
                 }).addOnSuccessListener(unused -> callback.onSuccess())
