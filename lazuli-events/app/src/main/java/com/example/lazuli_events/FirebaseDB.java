@@ -84,6 +84,14 @@ public class FirebaseDB {
     }
 
     /**
+     * Callback interface for retrieving lists of events.
+     */
+    public interface EventsListCallback {
+        void onSuccess(ArrayList<Event> events);
+        void onFailure(String error);
+    }
+
+    /**
      * Initializes the FirebaseDB instance and attaches a real-time snapshot listener
      * to the "profiles" collection in Firestore. This ensures the local {@code profiles}
      * and {@code emails} lists stay synchronized with the database.
@@ -589,6 +597,83 @@ public class FirebaseDB {
                         "declinedList", FieldValue.arrayUnion(entrantId)
                 )
                 .addOnSuccessListener(unused -> callback.onSuccess("Invitation declined successfully."))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    /**
+     * ADMIN: Fetches all events in the database to allow admins to browse them and their images.
+     * Fulfills US 03.04.01 and US 03.06.01.
+     *
+     * @param callback An EventsListCallback to return the list.
+     */
+    public void getAllEventsForAdmin(EventsListCallback callback) {
+        dbRefEvents.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            ArrayList<Event> events = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                events.add(doc.toObject(Event.class));
+            }
+            callback.onSuccess(events);
+        }).addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    /**
+     * ADMIN: Deletes an event completely, including its poster image from Firebase Storage.
+     * Fulfills US 03.01.01.
+     *
+     * @param event    The Event to delete.
+     * @param callback SimpleCallback to handle success/failure.
+     */
+    public void deleteEvent(Event event, SimpleCallback callback) {
+        if (event.getPosterUrl() != null && !event.getPosterUrl().isEmpty()) {
+            try {
+                FirebaseStorage.getInstance().getReferenceFromUrl(event.getPosterUrl()).delete();
+            } catch (Exception ignored) { }
+        }
+        dbRefEvents.document(event.getId()).delete()
+                .addOnSuccessListener(unused -> callback.onSuccess("Event deleted successfully."))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    /**
+     * ADMIN: Removes only the image attached to an event, leaving the event itself intact.
+     * Fulfills US 03.03.01.
+     *
+     * @param event    The Event whose image is being deleted.
+     * @param callback SimpleCallback to handle success/failure.
+     */
+    public void deleteEventImageOnly(Event event, SimpleCallback callback) {
+        if (event.getPosterUrl() == null || event.getPosterUrl().isEmpty()) {
+            callback.onFailure("This event does not have an image.");
+            return;
+        }
+        try {
+            StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(event.getPosterUrl());
+            photoRef.delete().addOnSuccessListener(unused -> {
+                dbRefEvents.document(event.getId()).update("posterUrl", null)
+                        .addOnSuccessListener(aVoid -> callback.onSuccess("Image removed successfully."))
+                        .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+            }).addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            callback.onFailure("Invalid image URL.");
+        }
+    }
+
+    /**
+     * ADMIN: Fetches every notification sent in the app to allow the admin to review logs.
+     * Fulfills US 03.08.01.
+     *
+     * @param callback A NotificationsCallback to return the list of all logs.
+     */
+    public void getAllNotificationsForAdmin(NotificationsCallback callback) {
+        dbRefNotifications.orderBy("timestamp", Query.Direction.DESCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    ArrayList<UserNotification> notifications = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        notifications.add(doc.toObject(UserNotification.class));
+                    }
+                    callback.onSuccess(notifications);
+                })
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 }
