@@ -82,12 +82,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/event_details_deadline_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="closes in 3 days" />
 
             <TextView
+                android:id="@+id/event_details_waitlist_count_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -116,6 +118,7 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/event_details_main_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="4dp"

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,11 @@ public class EventRepository {
 
     public interface PosterUploadCallback {
         void onSuccess(String downloadUrl);
+        void onError(Exception e);
+    }
+
+    public interface WaitlistStatusCallback {
+        void onResult(boolean isInWaitlist);
         void onError(Exception e);
     }
 
@@ -53,6 +59,10 @@ public class EventRepository {
             if (event.getWaitlistCount() < 0) {
                 event.setWaitlistCount(0);
             }
+        }
+
+        if (event.getWaitlist() == null) {
+            event.setWaitlist(new ArrayList<>());
         }
 
         event.setUpdatedAt(System.currentTimeMillis());
@@ -84,6 +94,13 @@ public class EventRepository {
                 event.setWaitlistCount(0);
             }
         }
+
+
+
+        if (event.getWaitlist() == null) {
+            event.setWaitlist(new ArrayList<>());
+        }
+
 
         event.setUpdatedAt(System.currentTimeMillis());
 
@@ -169,13 +186,71 @@ public class EventRepository {
                 .document(eventId)
                 .get()
                 .addOnSuccessListener(snapshot -> {
-                    Event event = snapshot.toObject(Event.class);
-                    if (event == null) {
+                    if (!snapshot.exists()) {
                         callback.onError(new Exception("Event not found"));
                         return;
                     }
-                    callback.onSuccess(event);
+
+                    try {
+                        Event event = new Event();
+
+                        String id = snapshot.getString("id");
+                        event.setId((id == null || id.trim().isEmpty()) ? snapshot.getId() : id);
+
+                        event.setOrganizerId(snapshot.getString("organizerId"));
+                        event.setName(snapshot.getString("name"));
+                        event.setDescription(snapshot.getString("description"));
+                        event.setLocation(snapshot.getString("location"));
+                        event.setContact(snapshot.getString("contact"));
+                        event.setPosterUrl(snapshot.getString("posterUrl"));
+
+                        event.setEventStartMillis(snapshot.getLong("eventStartMillis"));
+                        event.setRegistrationStartMillis(snapshot.getLong("registrationStartMillis"));
+                        event.setRegistrationEndMillis(snapshot.getLong("registrationEndMillis"));
+
+                        event.setWaitlistCap(snapshot.getLong("waitlistCap"));
+
+                        Long waitlistCountLong = snapshot.getLong("waitlistCount");
+                        event.setWaitlistCount(waitlistCountLong == null ? 0 : waitlistCountLong.intValue());
+
+                        event.setCreatedAt(snapshot.getLong("createdAt"));
+                        event.setUpdatedAt(snapshot.getLong("updatedAt"));
+
+                        ArrayList<String> fixedWaitlist = new ArrayList<>();
+                        Object rawWaitlist = snapshot.get("waitlist");
+
+                        if (rawWaitlist instanceof ArrayList<?>) {
+                            for (Object item : (ArrayList<?>) rawWaitlist) {
+                                if (item != null) {
+                                    fixedWaitlist.add(String.valueOf(item));
+                                }
+                            }
+                        }
+
+                        event.setWaitlist(fixedWaitlist);
+
+                        callback.onSuccess(event);
+
+                    } catch (Exception e) {
+                        callback.onError(new Exception("Failed to parse event: " + e.getMessage(), e));
+                    }
                 })
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * Check whether one entrant is already in an event waitlist.
+     */
+    public void isUserInWaitlist(@NonNull String eventId,
+                                 @NonNull String entrantId,
+                                 @NonNull WaitlistStatusCallback callback) {
+
+        db.collection("events")
+                .document(eventId)
+                .collection("waitlist")
+                .document(entrantId)
+                .get()
+                .addOnSuccessListener(snapshot -> callback.onResult(snapshot.exists()))
                 .addOnFailureListener(callback::onError);
     }
 
@@ -230,12 +305,16 @@ public class EventRepository {
 
                     transaction.set(waitlistRef, waitlistEntry);
                     transaction.update(eventRef, "waitlistCount", count + 1);
+                    transaction.update(eventRef, "waitlist", FieldValue.arrayUnion(String.valueOf(entrantId)));
 
                     return null;
                 }).addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(callback::onError);
     }
 
+    /**
+     * Remove entrant from waitlist and decrease waitlist count.
+     */
     public void leaveWaitlist(@NonNull String eventId,
                               @NonNull String entrantId,
                               @NonNull SimpleCallback callback) {
@@ -246,7 +325,7 @@ public class EventRepository {
         db.runTransaction(transaction -> {
                     DocumentSnapshot waitlistSnap = transaction.get(waitlistRef);
                     if (!waitlistSnap.exists()) {
-                        return null;
+                        throw new IllegalStateException("You are not in this waitlist.");
                     }
 
                     DocumentSnapshot eventSnap = transaction.get(eventRef);
@@ -255,6 +334,7 @@ public class EventRepository {
 
                     transaction.delete(waitlistRef);
                     transaction.update(eventRef, "waitlistCount", Math.max(0, count - 1));
+                    transaction.update(eventRef, "waitlist", FieldValue.arrayRemove(String.valueOf(entrantId)));
 
                     return null;
                 }).addOnSuccessListener(unused -> callback.onSuccess())

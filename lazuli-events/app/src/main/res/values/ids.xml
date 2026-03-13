@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <item name="actWaitlistCap" type="id">WaitlistCap</item>
+=======
+    <item name="actWaitlistCap" type="id" />
+>>>>>>> f4f0d95f023c3692d263fbc934072c32f89b5b4c
 </resources>
