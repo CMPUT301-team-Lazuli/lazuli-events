@@ -20,21 +20,55 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * Activity for creating a new event or editing an existing one.
+ *
+ * <p>This screen allows the organizer to:</p>
+ * <ul>
+ *     <li>Enter event details such as name, location, description, and contact</li>
+ *     <li>Select registration start and end date/time</li>
+ *     <li>Set an optional waitlist capacity</li>
+ *     <li>Select and preview an event poster image</li>
+ *     <li>Save the event to Firebase through {@link EventRepository}</li>
+ * </ul>
+ *
+ * <p>If an event ID is passed through the intent, the activity can be used in edit mode.
+ * Otherwise, it behaves as a create-event screen.</p>
+ */
 public class CreateEditEventActivity extends AppCompatActivity {
 
+    /** View binding for the create/edit event layout. */
     private ActivityCreateEditEventBinding binding;
+
+    /** Repository used for saving and retrieving event data. */
     private final EventRepository repository = new EventRepository();
 
+    /** URI of the poster image selected by the user. */
     private Uri selectedPosterUri;
+
+    /** Registration start time in milliseconds since epoch. */
     private Long registrationStartMillis;
+
+    /** Registration end time in milliseconds since epoch. */
     private Long registrationEndMillis;
 
-    // For edit mode
+    /** ID of the event being edited; null when creating a new event. */
     private String editingEventId;
+
+    /** Existing waitlist count, preserved in edit mode. */
     private int existingWaitlistCount = 0;
+
+    /** Existing creation timestamp, preserved in edit mode. */
     private Long existingCreatedAt;
+
+    /** Existing poster URL, preserved in edit mode if no new poster is selected. */
     private String existingPosterUrl;
 
+    /**
+     * Activity result launcher used to let the user pick an image from device storage.
+     *
+     * <p>When an image is selected, its URI is stored and previewed in the poster ImageView.</p>
+     */
     private final ActivityResultLauncher<String> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
@@ -43,6 +77,11 @@ public class CreateEditEventActivity extends AppCompatActivity {
                 }
             });
 
+    /**
+     * Initializes the activity, view binding, click listeners, and edit-mode state.
+     *
+     * @param savedInstanceState previously saved instance state, or null if none exists
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +102,13 @@ public class CreateEditEventActivity extends AppCompatActivity {
         // if (editingEventId != null) { loadEvent(editingEventId); }
     }
 
+    /**
+     * Displays a date picker followed by a time picker, then stores the selected
+     * date/time in either the registration start field or end field.
+     *
+     * @param isStartField {@code true} if the selected date/time should be applied
+     *                     to the registration start field, {@code false} for the end field
+     */
     private void showDateTimePicker(boolean isStartField) {
         Calendar now = Calendar.getInstance();
 
@@ -107,6 +153,19 @@ public class CreateEditEventActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    /**
+     * Validates user input, constructs an {@link Event} object, and saves it using the repository.
+     *
+     * <p>This method checks:</p>
+     * <ul>
+     *     <li>Event name is not empty</li>
+     *     <li>Registration start and end times are selected</li>
+     *     <li>Registration start is before registration end</li>
+     *     <li>Waitlist cap, if provided, is a valid positive number</li>
+     * </ul>
+     *
+     * <p>If validation succeeds, the event is saved and the activity finishes on success.</p>
+     */
     private void saveEvent() {
         String name = valueOf(binding.etEventName.getText());
         String location = valueOf(binding.etLocation.getText());
@@ -136,10 +195,10 @@ public class CreateEditEventActivity extends AppCompatActivity {
             return;
         }
 
-        Integer waitlistCap = null;
+        Long waitlistCap = null;
         if (!TextUtils.isEmpty(waitlistCapRaw)) {
             try {
-                int parsed = Integer.parseInt(waitlistCapRaw);
+                long parsed = Long.parseLong(waitlistCapRaw);
                 if (parsed <= 0) {
                     Toast.makeText(this,
                             "Waitlist cap must be greater than 0, or leave it blank",
@@ -196,16 +255,35 @@ public class CreateEditEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Updates the UI to reflect whether the activity is currently saving an event.
+     *
+     * @param saving {@code true} if a save operation is in progress, {@code false} otherwise
+     */
     private void setSaving(boolean saving) {
         binding.btnSaveEvent.setEnabled(!saving);
         binding.btnSaveEvent.setText(saving ? "Saving..." : "Save Event");
     }
 
+    /**
+     * Formats a millisecond timestamp into a user-friendly date/time string.
+     *
+     * @param millis the timestamp in milliseconds since epoch
+     * @return a formatted date/time string
+     */
     private String formatDateTime(long millis) {
         return new SimpleDateFormat("MMM d, yyyy h:mm a", Locale.getDefault())
                 .format(millis);
     }
 
+    /**
+     * Converts a {@link CharSequence} to a trimmed {@link String}.
+     *
+     * <p>If the input is null, an empty string is returned.</p>
+     *
+     * @param charSequence the character sequence to convert
+     * @return the trimmed string value, or an empty string if null
+     */
     private String valueOf(CharSequence charSequence) {
         return charSequence == null ? "" : charSequence.toString().trim();
     }

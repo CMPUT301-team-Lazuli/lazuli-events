@@ -37,23 +37,26 @@ public class MainActivity extends AppCompatActivity {
     public Profile sessionProfile; //the current user's session
     private final String profileBundleKey = "sessionProfile";
     NavHostFragment navHostFragment;
-//    BottomNavigationView bottomNavigationView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_nav_graph);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         firebaseDB = new FirebaseDB();
 
         // get the controller of the navhost. navhost is the UI view with navigation buttons
         navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_host);
+        if (navHostFragment == null) {
+            return;
+        }
         navController = navHostFragment.getNavController();
 
         // get current user session and add profile into a bundle

@@ -26,6 +26,7 @@ public class EditProfileFragment extends Fragment {
     private static final String key = "sessionProfile";
 
     public EditProfileFragment() {
+
     }
 
     @Nullable

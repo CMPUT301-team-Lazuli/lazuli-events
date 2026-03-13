@@ -15,7 +15,6 @@
         android:paddingEnd="16dp"
         android:paddingBottom="24dp">
 
-        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +44,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Generate QR row -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardGenerateQr"
             android:layout_width="match_parent"
@@ -87,7 +85,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Poster / Cover -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardPoster"
             android:layout_width="match_parent"
@@ -134,7 +131,6 @@
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Event Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEventName"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -156,7 +152,6 @@
                 android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Registration Window -->
         <TextView
             android:id="@+id/tvRegistrationWindowLabel"
             android:layout_width="wrap_content"
@@ -224,7 +219,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Location -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilLocation"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -247,7 +241,6 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Event Type + Audience -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -272,6 +265,7 @@
                     android:id="@+id/actEventType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
                     android:inputType="none"
                     android:textColor="#1F1F1F"
                     android:textSize="14sp" />
@@ -295,16 +289,16 @@
                     android:id="@+id/actWhoCanAttend"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
                     android:inputType="none"
                     android:textColor="#1F1F1F"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Spots Open / Waitlist Cap -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilWaitlistCap"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -315,16 +309,16 @@
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etWaitlistCap"
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/actWaitlistCap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:focusable="false"
+                android:inputType="none"
                 android:textColor="#1F1F1F"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Description -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDescription"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -349,7 +343,6 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Contact -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilContact"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -372,7 +365,6 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Save -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveEvent"
             android:layout_width="match_parent"

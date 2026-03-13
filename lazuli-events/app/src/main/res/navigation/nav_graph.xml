@@ -5,88 +5,102 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/userEventsFragment">
 
-
-<!--    fragment destinations for bottom navbar buttons -->
+    <!-- fragment destinations for bottom navbar buttons -->
     <fragment
         android:id="@+id/userEventsFragment"
         android:name="com.example.lazuli_events.home.EventsHomeFragment"
         android:label="fragment_user_events"
-        tools:layout="@layout/fragment_events_home" >
+        tools:layout="@layout/fragment_events_home">
+
         <action
             android:id="@+id/action_userEventsFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+
+        <action
+            android:id="@+id/action_userEventsFragment_to_tabCreateEventFragment"
+            app:destination="@id/tabCreateEventFragment" />
     </fragment>
 
+    <!-- CREATE EVENT -->
+    <fragment
+        android:id="@+id/tabCreateEventFragment"
+        android:name="com.example.lazuli_events.home.TabCreateEvent"
+        android:label="fragment_create_event"
+        tools:layout="@layout/fragment_create_event" />
 
-<!--    NOTIFICATIONS -->
+    <!-- NOTIFICATIONS -->
     <fragment
         android:id="@+id/userNotificationsFragment"
         android:name="com.example.lazuli_events.notifications.NotificationsFragment"
         android:label="fragment_user_notifications"
         tools:layout="@layout/fragment_notifications">
+
         <action
             android:id="@+id/action_userNotificationsFragment_to_notificationSettingsFragment"
             app:destination="@id/notificationSettingsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/notificationSettingsFragment"
         android:name="com.example.lazuli_events.notifications.NotificationSettingsFragment"
         android:label="fragment_notification_preferences"
         tools:layout="@layout/fragment_notification_settings" />
 
-
-<!--    EVENTS -->
+    <!-- EVENTS -->
     <fragment
         android:id="@+id/userExploreEventsFragment"
         android:name="com.example.lazuli_events.events.ExploreEventsFragment"
         android:label="fragment_user_explore_events"
-        tools:layout="@layout/fragment_explore_events" >
+        tools:layout="@layout/fragment_explore_events">
+
         <action
             android:id="@+id/action_userExploreEventsFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
     </fragment>
 
-
-<!--    PROFILE -->
+    <!-- PROFILE -->
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.lazuli_events.profile.ProfileFragment"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_profile">
+
         <action
             android:id="@+id/action_userProfileFragment_to_userEventsFragment"
             app:destination="@id/userEventsFragment" />
+
         <action
             android:id="@+id/action_userProfileFragment_to_editProfileFragment"
             app:destination="@id/userEventsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.lazuli_events.profile.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
 
-
-
     <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="com.example.lazuli_events.events.EventDetailsFragment"
         android:label="fragment_event_details"
         tools:layout="@layout/fragment_event_details">
+
         <action
             android:id="@+id/action_userExploreEventsFragment_to_eventDetailsFragment"
             app:destination="@id/userEventsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/eventManagerFragment"
         android:name="com.example.lazuli_events.home.EventManagerFragment"
         android:label="fragment_event_manager"
         tools:layout="@layout/fragment_event_manager" />
+
     <fragment
         android:id="@+id/composeNotificationFragment"
         android:name="com.example.lazuli_events.home.ComposeNotificationFragment"
         android:label="fragment_compose_notification"
         tools:layout="@layout/fragment_compose_notification" />
-
 
 </navigation>
