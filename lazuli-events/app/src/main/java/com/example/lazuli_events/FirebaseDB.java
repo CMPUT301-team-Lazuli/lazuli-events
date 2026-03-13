@@ -555,4 +555,40 @@ public class FirebaseDB {
             sendLotteryLoseNotification(loserId, eventId, eventTitle, innerCallback);
         }
     }
+
+    /**
+     * Handles an entrant accepting an event invitation by moving their ID from the
+     * chosen list to the accepted list in the database.
+     *
+     * @param eventId   The ID of the event the user is accepting.
+     * @param entrantId The ID of the user accepting the invitation.
+     * @param callback  A SimpleCallback to handle success or failure responses.
+     */
+    public void acceptEventInvitation(String eventId, String entrantId, SimpleCallback callback) {
+        dbRefEvents.document(eventId)
+                .update(
+                        "chosenList", FieldValue.arrayRemove(entrantId),
+                        "acceptedList", FieldValue.arrayUnion(entrantId)
+                )
+                .addOnSuccessListener(unused -> callback.onSuccess("Invitation accepted successfully."))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    /**
+     * Handles an entrant declining an event invitation by moving their ID from the
+     * chosen list to the declined list in the database.
+     *
+     * @param eventId   The ID of the event the user is declining.
+     * @param entrantId The ID of the user declining the invitation.
+     * @param callback  A SimpleCallback to handle success or failure responses.
+     */
+    public void declineEventInvitation(String eventId, String entrantId, SimpleCallback callback) {
+        dbRefEvents.document(eventId)
+                .update(
+                        "chosenList", FieldValue.arrayRemove(entrantId),
+                        "declinedList", FieldValue.arrayUnion(entrantId)
+                )
+                .addOnSuccessListener(unused -> callback.onSuccess("Invitation declined successfully."))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
 }

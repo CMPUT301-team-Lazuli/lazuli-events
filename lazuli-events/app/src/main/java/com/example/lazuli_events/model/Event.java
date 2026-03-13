@@ -68,11 +68,18 @@ public class Event {
     /** Timestamp of the most recent event update, in milliseconds since epoch. */
     private Long updatedAt;
 
+    private ArrayList<String> chosenList;
+    private ArrayList<String> acceptedList;
+    private ArrayList<String> declinedList;
+
     /**
-     * Creates a new empty event with an initialized waitlist.
+     * Creates a new empty event with initialized participant lists.
      */
     public Event() {
         this.waitlist = new ArrayList<>();
+        this.chosenList = new ArrayList<>();
+        this.acceptedList = new ArrayList<>();
+        this.declinedList = new ArrayList<>();
     }
 
     public String getId() {
@@ -235,5 +242,32 @@ public class Event {
                 && registrationEndMillis != null
                 && nowMillis >= registrationStartMillis
                 && nowMillis <= registrationEndMillis;
+    }
+
+    public ArrayList<String> getChosenList() {
+        if (chosenList == null) chosenList = new ArrayList<>();
+        return chosenList;
+    }
+
+    public void setChosenList(ArrayList<String> chosenList) {
+        this.chosenList = chosenList;
+    }
+
+    public ArrayList<String> getAcceptedList() {
+        if (acceptedList == null) acceptedList = new ArrayList<>();
+        return acceptedList;
+    }
+
+    public void setAcceptedList(ArrayList<String> acceptedList) {
+        this.acceptedList = acceptedList;
+    }
+
+    public ArrayList<String> getDeclinedList() {
+        if (declinedList == null) declinedList = new ArrayList<>();
+        return declinedList;
+    }
+
+    public void setDeclinedList(ArrayList<String> declinedList) {
+        this.declinedList = declinedList;
     }
 }
