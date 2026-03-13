@@ -1,6 +1,12 @@
 package com.example.lazuli_events;
 
+import android.util.Log;
+
 import com.example.lazuli_events.profile.Profile;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import org.junit.Test;
 
@@ -11,7 +17,7 @@ public class FirebaseDBTest {
         ArrayList<String> eventIds = new ArrayList<>();
         eventIds.add("A");
         eventIds.add("B");
-        Profile mockProfile =  new Profile("Maya", "memail", "MPhone", "MDeviceId",
+        Profile mockProfile =  new Profile("tester", "testemail", "123-4567", "device123",
                 "All", eventIds);
         return mockProfile;
     }
@@ -43,20 +49,47 @@ public class FirebaseDBTest {
         emails.add("email5");
         return emails;
     }
-    
+
+    @Test
+    public void testAddDeleteProfiles(){
+        //Add to database using firebaseDB class
+        FirebaseDB firebaseDB = new FirebaseDB();
+        Profile testProfile = mockProfile();
+        firebaseDB.addProfileToDB(testProfile);
+
+        //Check if the profile has been added to the actual firebase database
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference colRef = db.collection("profiles");
+        DocumentReference docRef = colRef.document(testProfile.getEmail());
+        ArrayList<Profile> foundProfiles = new ArrayList<Profile>();
+
+
+        /*
+        colRef.addSnapshotListener((value, error) -> {
+            if (error != null){
+                Log.e("Firestore", error.toString());
+            }
+            if (value != null && !value.isEmpty()){
+                cityArrayList.clear();
+                for (QueryDocumentSnapshot snapshot : value){
+                    String name = snapshot.getString("name");
+                    String email = snapshot.getString("email");
+                    String phone = snapshot.getString("phone");
+                    String devId = snapshot.getString("deviceId");
+                    String notifPref = snapshot.getString("notifPref");
+                    ArrayList<String> eventIds = (ArrayList<String>) snapshot.get("eventIds");
+
+                    foundProfiles.add(new Profile(name, email, phone, devId, notifPref, eventIds));
+                }
+            }
+        });
+
+         */
+
+    }
+
     @Test
     public void testGetProfiles(){
-        FirebaseDB firebaseDB = new FirebaseDB();
-        firebaseDB.addProfileToDB(mockProfile());
 
-        //get from firebase class
-        ArrayList<Profile> profilesInFirebaseDB = firebaseDB.getProfiles();
-        //get from db
-
-        //check errors thrown
-    }
-    @Test
-    public void testAddProfiles(){
-        ArrayList<Profile> profiles = mockProfiles();
     }
 }
