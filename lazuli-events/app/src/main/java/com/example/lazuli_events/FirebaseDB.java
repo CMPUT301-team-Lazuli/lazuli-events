@@ -22,9 +22,9 @@ import java.util.UUID;
  *
  * <p>This class currently manages three main types of application data:</p>
  * <ul>
- *     <li>{@link Profile} documents stored in the {@code profiles} collection</li>
- *     <li>{@link UserNotification} documents stored in the {@code notifications} collection</li>
- *     <li>{@link Event} documents stored in the {@code events} collection</li>
+ * <li>{@link Profile} documents stored in the {@code profiles} collection</li>
+ * <li>{@link UserNotification} documents stored in the {@code notifications} collection</li>
+ * <li>{@link Event} documents stored in the {@code events} collection</li>
  * </ul>
  *
  * <p>It also maintains local in-memory lists of profiles and profile email addresses
@@ -196,11 +196,11 @@ public class FirebaseDB {
      *
      * <p>Supported fields include:</p>
      * <ul>
-     *     <li>{@code name}</li>
-     *     <li>{@code email}</li>
-     *     <li>{@code phoneNumber} or {@code phone}</li>
-     *     <li>{@code deviceId}</li>
-     *     <li>{@code notifPref}</li>
+     * <li>{@code name}</li>
+     * <li>{@code email}</li>
+     * <li>{@code phoneNumber} or {@code phone}</li>
+     * <li>{@code deviceId}</li>
+     * <li>{@code notifPref}</li>
      * </ul>
      *
      * <p>If the email field changes, the old Firestore document is deleted and
@@ -210,8 +210,8 @@ public class FirebaseDB {
      * @param newFieldStr the new value for the field
      * @param profile the profile to update
      * @throws IllegalArgumentException if the profile is not in the database,
-     *                                  if the new email already exists,
-     *                                  or if the field name is invalid
+     * if the new email already exists,
+     * or if the field name is invalid
      */
     public void updateProfileField(String fieldToChange, String newFieldStr, Profile profile) {
         if (!assertProfileInDatabase(profile)) {
@@ -325,7 +325,7 @@ public class FirebaseDB {
      * Retrieves all notifications for a specific recipient, ordered by timestamp descending.
      *
      * @param recipientId the recipient user ID
-     * @param callback callback used to report success or failure
+     * @param callback callback used to return the list of notifications or an error
      */
     public void getNotificationsForUser(String recipientId, NotificationsCallback callback) {
         dbRefNotifications
@@ -358,9 +358,10 @@ public class FirebaseDB {
     /**
      * Saves an event to Firestore, optionally uploading a poster image to Storage.
      *
-     * <p>If {@code imageUri} is provided, the poster is uploaded first, and its
-     * public download URL is saved in the {@code event} object before it is
-     * written to Firestore. If no {@code imageUri} is provided, the event is
+     * <p>This stores all event fields, including registrationStartMillis,
+     * registrationEndMillis, and registrationPeriodText. If {@code imageUri} is provided,
+     * the poster is uploaded first, and its public download URL is saved in the {@code event}
+     * object before it is written to Firestore. If no {@code imageUri} is provided, the event is
      * saved immediately.</p>
      *
      * @param event the event to save
@@ -373,10 +374,14 @@ public class FirebaseDB {
             return;
         }
 
-        if (event.getId() == null || event.getId().trim().isEmpty()) {
-            event.setId(dbRefEvents.document().getId());
+        String eventId = event.getId();
+        if (eventId == null || eventId.trim().isEmpty()) {
+            eventId = dbRefEvents.document().getId();
+            event.setId(eventId);
         }
-        final String eventId = event.getId();
+
+        // Final copy for use inside lambdas
+        final String finalEventId = eventId;
 
         long now = System.currentTimeMillis();
         if (event.getCreatedAt() == null) {
@@ -385,14 +390,14 @@ public class FirebaseDB {
         event.setUpdatedAt(now);
 
         if (imageUri == null) {
-            dbRefEvents.document(eventId)
+            dbRefEvents.document(finalEventId)
                     .set(event)
                     .addOnSuccessListener(unused -> callback.onSuccess("Event saved without poster."))
                     .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
             return;
         }
 
-        StorageReference posterRef = storageRef.child("event_posters/" + eventId + ".jpg");
+        StorageReference posterRef = storageRef.child("event_posters/" + finalEventId + ".jpg");
 
         posterRef.putFile(imageUri)
                 .continueWithTask(task -> {
@@ -407,7 +412,7 @@ public class FirebaseDB {
                 .addOnSuccessListener(downloadUri -> {
                     event.setPosterUrl(downloadUri.toString());
 
-                    dbRefEvents.document(eventId)
+                    dbRefEvents.document(finalEventId)
                             .set(event)
                             .addOnSuccessListener(unused ->
                                     callback.onSuccess("Event and poster saved successfully."))
