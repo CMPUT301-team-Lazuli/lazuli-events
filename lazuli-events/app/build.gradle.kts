@@ -56,4 +56,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     // ZXing for QR Code generation
     implementation("com.google.zxing:core:3.5.4")
+
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
 }
